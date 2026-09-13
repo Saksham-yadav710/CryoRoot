@@ -7,6 +7,8 @@ import '../../../models/crop_profile.dart';
 import '../../../models/produce_batch.dart';
 import '../../../state/produce_providers.dart';
 import '../../../state/storage_providers.dart';
+import '../widgets/add_custom_crop_dialog.dart';
+import '../widgets/crop_autocomplete_selector.dart';
 
 class AddProduceScreen extends ConsumerStatefulWidget {
   const AddProduceScreen({super.key});
@@ -126,57 +128,56 @@ class _AddProduceScreenState extends ConsumerState<AddProduceScreen> {
 
               const SizedBox(height: 18),
 
-              // 2. Select Crop Profile
-              const Text(
-                'SELECT CROP',
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.textSecondary,
-                  letterSpacing: 0.5,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                decoration: BoxDecoration(
-                  color: AppColors.surface,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.border),
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<CropProfile>(
-                    value: _selectedCrop,
-                    isExpanded: true,
-                    items: cropProfiles.map((crop) {
-                      return DropdownMenuItem<CropProfile>(
-                        value: crop,
-                        child: Row(
-                          children: [
-                            Text(crop.iconEmoji,
-                                style: const TextStyle(fontSize: 18)),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Text(
-                                '${crop.name} (${crop.category})',
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700,
-                                  color: AppColors.textPrimary,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
-                    onChanged: (crop) {
-                      setState(() {
-                        _selectedCrop = crop;
-                      });
+              // 2. Select Crop Profile (Typeahead Autocomplete + Custom Add)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    'SELECT VEGETABLE / CROP',
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.w800,
+                      color: AppColors.textSecondary,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                  TextButton.icon(
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 2),
+                      visualDensity: VisualDensity.compact,
+                    ),
+                    icon: const Icon(Icons.add,
+                        size: 16, color: AppColors.primary),
+                    label: const Text(
+                      'Add New',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    onPressed: () async {
+                      final newCrop =
+                          await AddCustomCropDialog.show(context, '');
+                      if (newCrop != null) {
+                        setState(() {
+                          _selectedCrop = newCrop;
+                        });
+                      }
                     },
                   ),
-                ),
+                ],
+              ),
+              const SizedBox(height: 6),
+              CropAutocompleteSelector(
+                cropProfiles: cropProfiles,
+                selectedCrop: _selectedCrop,
+                onCropSelected: (crop) {
+                  setState(() {
+                    _selectedCrop = crop;
+                  });
+                },
               ),
 
               if (_selectedCrop != null) ...[

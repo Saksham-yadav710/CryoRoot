@@ -3,12 +3,36 @@ import '../models/crop_profile.dart';
 import '../models/produce_batch.dart';
 import '../services/mock/crop_profiles_data.dart';
 
-// 1. Available Crop Profiles Provider
-final cropProfilesProvider = Provider<List<CropProfile>>((ref) {
-  return CropProfilesData.getProfiles();
+// 1. User Custom Crops State Notifier Provider
+final userCustomCropsProvider =
+    StateNotifierProvider<UserCustomCropsNotifier, List<CropProfile>>((ref) {
+  return UserCustomCropsNotifier();
 });
 
-// 2. Active Produce Batches State Provider
+class UserCustomCropsNotifier extends StateNotifier<List<CropProfile>> {
+  UserCustomCropsNotifier() : super([]);
+
+  void addCustomCrop(CropProfile crop) {
+    final customCrop = crop.copyWith(isCustom: true);
+    state = [
+      customCrop,
+      ...state.where((c) => c.name.toLowerCase() != crop.name.toLowerCase()),
+    ];
+  }
+
+  void removeCustomCrop(String id) {
+    state = state.where((c) => c.id != id).toList();
+  }
+}
+
+// 2. Available Crop Profiles Provider (Combines built-in 70+ crops + user custom crops)
+final cropProfilesProvider = Provider<List<CropProfile>>((ref) {
+  final customCrops = ref.watch(userCustomCropsProvider);
+  final builtIn = CropProfilesData.getProfiles();
+  return [...customCrops, ...builtIn];
+});
+
+// 3. Active Produce Batches State Provider
 final produceBatchesProvider =
     StateNotifierProvider<ProduceBatchesNotifier, List<ProduceBatch>>((ref) {
   return ProduceBatchesNotifier(ref);
@@ -88,7 +112,7 @@ class ProduceBatchesNotifier extends StateNotifier<List<ProduceBatch>> {
   }
 }
 
-// 3. Filter & Search State Providers
+// 4. Filter & Search State Providers
 final produceFilterUnitIdProvider = StateProvider<String?>((ref) => null);
 final produceSearchQueryProvider = StateProvider<String>((ref) => '');
 
@@ -113,7 +137,7 @@ final filteredProduceBatchesProvider = Provider<List<ProduceBatch>>((ref) {
   }).toList();
 });
 
-// 4. Total Produce Farm Metrics Provider
+// 5. Total Produce Farm Metrics Provider
 class FarmProduceMetrics {
   final double totalKg;
   final double totalEstimatedValuation;
