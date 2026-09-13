@@ -69,13 +69,16 @@ class SelectedUnitHeroCard extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Text(
-                            unit.name,
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w800,
-                              color: AppColors.textPrimary,
-                              letterSpacing: -0.4,
+                          Flexible(
+                            child: Text(
+                              unit.name,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w800,
+                                color: AppColors.textPrimary,
+                                letterSpacing: -0.4,
+                              ),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           const SizedBox(width: 8),
@@ -107,12 +110,15 @@ class SelectedUnitHeroCard extends StatelessWidget {
                             color: AppColors.textSecondary,
                           ),
                           const SizedBox(width: 4),
-                          Text(
-                            unit.fullLocation,
-                            style: const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.textSecondary,
+                          Flexible(
+                            child: Text(
+                              unit.fullLocation,
+                              style: const TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.textSecondary,
+                              ),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                         ],

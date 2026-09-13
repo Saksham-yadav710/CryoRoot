@@ -15,6 +15,7 @@ import '../widgets/telemetry_grid.dart';
 import '../widgets/recommendation_card.dart';
 import '../../settings/widgets/voice_settings_sheet.dart';
 import '../../../state/auth_providers.dart';
+import '../../../core/widgets/responsive_layout.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -71,9 +72,11 @@ class HomeScreen extends ConsumerWidget {
               },
               child: SingleChildScrollView(
                 physics: const AlwaysScrollableScrollPhysics(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
+                child: ResponsiveCenter(
+                  padding: EdgeInsets.zero,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
                     // Overall System Health & Connectivity Summary Banner
                     OverallStatusBanner(
                       summary: summary,
@@ -210,10 +213,11 @@ class HomeScreen extends ConsumerWidget {
               ),
             ),
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      ],
+    ),
+  );
+}
 
   void _showProfileModal(BuildContext context, WidgetRef ref) {
     final selectedVoice = ref.watch(selectedVoiceLanguageProvider);

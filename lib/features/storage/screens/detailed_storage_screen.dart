@@ -13,6 +13,7 @@ import '../widgets/technician_hardware_card.dart';
 import '../widgets/user_role_switcher_bar.dart';
 import '../widgets/technician_login_dialog.dart';
 import '../../../state/technician_auth_provider.dart';
+import '../../../core/widgets/responsive_layout.dart';
 
 class DetailedStorageScreen extends ConsumerStatefulWidget {
   final String unitId;
@@ -112,10 +113,11 @@ class _DetailedStorageScreenState extends ConsumerState<DetailedStorageScreen> {
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        child: ResponsiveCenter(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
             // 0. Active Persona Switcher (Farmer A vs Farmer B vs Field Tech)
             const UserRoleSwitcherBar(),
             const SizedBox(height: 6),
@@ -524,6 +526,7 @@ class _DetailedStorageScreenState extends ConsumerState<DetailedStorageScreen> {
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }

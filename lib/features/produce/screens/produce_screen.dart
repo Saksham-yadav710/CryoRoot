@@ -9,6 +9,7 @@ import '../../../models/status_level.dart';
 import '../../../state/produce_providers.dart';
 import '../../../state/storage_providers.dart';
 import '../../../state/transit_providers.dart';
+import '../../../core/widgets/responsive_layout.dart';
 
 final produceTabSelectionProvider = StateProvider<int>((ref) => 0);
 
@@ -43,8 +44,10 @@ class ProduceScreen extends ConsumerWidget {
               ),
             )
           : null,
-      body: Column(
-        children: [
+      body: ResponsiveCenter(
+        padding: EdgeInsets.zero,
+        child: Column(
+          children: [
           // 1. Farm Inventory Summary Banner
           Container(
             margin: const EdgeInsets.fromLTRB(16, 12, 16, 8),
@@ -341,8 +344,9 @@ class ProduceScreen extends ConsumerWidget {
           ],
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildFilterChip({
     required String label,

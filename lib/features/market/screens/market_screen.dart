@@ -12,6 +12,7 @@ import '../../../state/audio_providers.dart';
 import '../../../services/decision/market_decision_engine.dart';
 import '../../../services/mock/market_data.dart';
 import '../../../services/mock/crop_profiles_data.dart';
+import '../../../core/widgets/responsive_layout.dart';
 
 class MarketScreen extends ConsumerWidget {
   const MarketScreen({super.key});
@@ -42,10 +43,11 @@ class MarketScreen extends ConsumerWidget {
         ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        child: ResponsiveCenter(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
             // 1. Top Decision Banner (Actionable sell-or-store guidance)
             Container(
               padding: const EdgeInsets.all(16),
@@ -268,8 +270,9 @@ class MarketScreen extends ConsumerWidget {
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildBatchDecisionCard(
     BuildContext context,

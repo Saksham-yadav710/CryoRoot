@@ -6,6 +6,7 @@ import '../../../models/status_level.dart';
 import '../../../state/storage_providers.dart';
 import '../../../state/audio_providers.dart';
 import '../widgets/action_guide_dialog.dart';
+import '../../../core/widgets/responsive_layout.dart';
 
 class AlertsScreen extends ConsumerWidget {
   const AlertsScreen({super.key});
@@ -24,8 +25,10 @@ class AlertsScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Storage Alerts & Actions'),
       ),
-      body: Column(
-        children: [
+      body: ResponsiveCenter(
+        padding: EdgeInsets.zero,
+        child: Column(
+          children: [
           // 1. Severity Summary Dashboard Banner
           Container(
             margin: const EdgeInsets.fromLTRB(16, 12, 16, 8),
@@ -215,8 +218,9 @@ class AlertsScreen extends ConsumerWidget {
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 
   Widget _buildCountPill({
     required String label,

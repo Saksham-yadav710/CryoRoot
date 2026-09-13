@@ -15,211 +15,333 @@ class TelemetryGrid extends StatelessWidget {
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          final isWide = constraints.maxWidth >= 800;
+          final isMedium = constraints.maxWidth >= 520 && !isWide;
+          final crossAxisCount = isWide ? 4 : 2;
+          final childAspectRatio = isWide ? 1.4 : (isMedium ? 1.3 : 0.98);
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'PRIMARY STORAGE CONDITIONS',
-                style: TextStyle(
-                  fontSize: 11,
-                  fontWeight: FontWeight.w800,
-                  color: AppColors.textSecondary,
-                  letterSpacing: 0.5,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Flexible(
+                    child: Text(
+                      'PRIMARY STORAGE CONDITIONS',
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.textSecondary,
+                        letterSpacing: 0.5,
+                      ),
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    isOnline
+                        ? 'VALUE + STATUS + EXPLANATION'
+                        : 'OFFLINE (LAST KNOWN)',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.w700,
+                      color: isOnline
+                          ? AppColors.textTertiary
+                          : AppColors.statusOffline,
+                    ),
+                  ),
+                ],
               ),
-              Text(
-                isOnline
-                    ? 'VALUE + STATUS + EXPLANATION'
-                    : 'OFFLINE (LAST KNOWN)',
-                style: TextStyle(
-                  fontSize: 10,
-                  fontWeight: FontWeight.w700,
-                  color: isOnline
-                      ? AppColors.textTertiary
-                      : AppColors.statusOffline,
-                ),
+              const SizedBox(height: 10),
+
+              // Primary 4-Card (Desktop) or 2-Card (Mobile) Grid
+              GridView.count(
+                crossAxisCount: crossAxisCount,
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                mainAxisSpacing: 12,
+                crossAxisSpacing: 12,
+                childAspectRatio: childAspectRatio,
+                children: [
+                  // 1. Temperature Card
+                  TelemetryCard(
+                    title: 'Temperature',
+                    value: reading.displayTemperature,
+                    status: reading.temperatureStatus,
+                    statusText: !reading.isTemperatureValid
+                        ? 'UNAVAILABLE'
+                        : (!isOnline
+                            ? 'OFFLINE'
+                            : reading.temperatureStatus.label),
+                    explanation: reading.temperatureExplanation,
+                    icon: Icons.thermostat_rounded,
+                    accentColor: AppColors.secondary,
+                    updatedTimeText: reading.tempUpdatedText,
+                    hasFault: reading.hasTemperatureFault,
+                    faultMessage: reading.temperatureFaultReason,
+                  ),
+
+                  // 2. Humidity Card
+                  TelemetryCard(
+                    title: 'Humidity',
+                    value: reading.displayHumidity,
+                    status: reading.humidityStatus,
+                    statusText: !reading.isHumidityValid
+                        ? 'UNAVAILABLE'
+                        : (!isOnline
+                            ? 'OFFLINE'
+                            : reading.humidityStatus.label),
+                    explanation: reading.humidityExplanation,
+                    icon: Icons.water_drop_rounded,
+                    accentColor: const Color(0xFF0284C7),
+                    updatedTimeText: reading.humidityUpdatedText,
+                    hasFault: reading.hasHumidityFault,
+                    faultMessage: reading.humidityFaultReason,
+                  ),
+
+                  // 3. Battery Card
+                  TelemetryCard(
+                    title: 'Battery',
+                    value: reading.displayBattery,
+                    status: reading.batteryStatus,
+                    statusText: !reading.isBatteryValid
+                        ? 'UNAVAILABLE'
+                        : (!isOnline
+                            ? 'OFFLINE'
+                            : reading.batteryStatus.label),
+                    explanation: reading.batteryExplanation,
+                    icon: Icons.battery_charging_full_rounded,
+                    accentColor: AppColors.statusGood,
+                    updatedTimeText: reading.batteryUpdatedText,
+                    hasFault: reading.hasBatteryFault,
+                    faultMessage: reading.batteryFaultReason,
+                  ),
+
+                  // 4. Solar Power Card
+                  TelemetryCard(
+                    title: 'Solar Power',
+                    value: reading.displaySolar,
+                    unit: reading.isSolarValid ? 'W' : null,
+                    status: reading.solarStatus,
+                    statusText: !reading.isSolarValid
+                        ? 'UNAVAILABLE'
+                        : (!isOnline
+                            ? 'OFFLINE'
+                            : (reading.solarPower > 0
+                                ? 'ACTIVE'
+                                : 'INACTIVE')),
+                    explanation: reading.solarExplanation,
+                    icon: Icons.solar_power_rounded,
+                    accentColor: AppColors.solarGold,
+                    updatedTimeText: reading.solarUpdatedText,
+                    hasFault: reading.hasSolarFault,
+                    faultMessage: reading.solarFaultReason,
+                  ),
+                ],
               ),
+
+              const SizedBox(height: 12),
+
+              if (isWide) ...[
+                // Desktop: Balanced side-by-side PCM Reserve & Secondary Metrics
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 2,
+                      child: TelemetryCard(
+                        title: 'PCM Backup',
+                        value: reading.displayPcmHours,
+                        status: reading.pcmStatus,
+                        statusText: !reading.isPcmValid
+                            ? 'UNAVAILABLE'
+                            : (!isOnline
+                                ? 'OFFLINE'
+                                : reading.pcmStatus.systemSafeLabel),
+                        explanation: reading.pcmExplanation,
+                        icon: Icons.ac_unit_rounded,
+                        accentColor: AppColors.pcmCyan,
+                        updatedTimeText: reading.pcmUpdatedText,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      flex: 3,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'SECONDARY PARAMETERS',
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.w800,
+                              color: AppColors.textSecondary,
+                              letterSpacing: 0.5,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _buildCompactCard(
+                                  title: 'GRID POWER',
+                                  value: reading.displayGridPower,
+                                  statusLevel: reading.gridStatus,
+                                  statusText: !reading.isGridValid
+                                      ? 'UNAVAIL'
+                                      : (reading.gridPower
+                                          ? 'NORMAL'
+                                          : 'OUTAGE'),
+                                  icon: reading.gridPower
+                                      ? Icons.power_rounded
+                                      : Icons.power_off_rounded,
+                                  iconColor: reading.gridPower
+                                      ? AppColors.primary
+                                      : AppColors.statusWarning,
+                                  bgColor: reading.gridPower
+                                      ? AppColors.surface
+                                      : AppColors.statusWarningBg,
+                                  updatedTimeText: reading.gridUpdatedText,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: _buildCompactCard(
+                                  title: 'DOOR',
+                                  value: reading.displayDoor,
+                                  statusLevel: reading.doorStatus,
+                                  statusText: !reading.isDoorValid
+                                      ? 'UNAVAIL'
+                                      : (reading.doorOpen
+                                          ? 'WARNING'
+                                          : 'SECURE'),
+                                  icon: reading.doorOpen
+                                      ? Icons.door_front_door_outlined
+                                      : Icons.meeting_room_rounded,
+                                  iconColor: reading.doorOpen
+                                      ? AppColors.statusCritical
+                                      : AppColors.primary,
+                                  bgColor: reading.doorOpen
+                                      ? AppColors.statusCriticalBg
+                                      : AppColors.surface,
+                                  updatedTimeText: reading.doorUpdatedText,
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: _buildCompactCard(
+                                  title: 'WATER TANK',
+                                  value: reading.displayWaterLevel,
+                                  statusLevel: StatusLevel.good,
+                                  statusText: !reading.isWaterValid
+                                      ? 'UNAVAIL'
+                                      : 'GOOD',
+                                  icon: Icons.opacity_rounded,
+                                  iconColor: const Color(0xFF0284C7),
+                                  bgColor: AppColors.surface,
+                                  updatedTimeText: reading.waterUpdatedText,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ] else ...[
+                // Mobile: Stacked view
+                TelemetryCard(
+                  title: 'PCM Backup',
+                  value: reading.displayPcmHours,
+                  status: reading.pcmStatus,
+                  statusText: !reading.isPcmValid
+                      ? 'UNAVAILABLE'
+                      : (!isOnline
+                          ? 'OFFLINE'
+                          : reading.pcmStatus.systemSafeLabel),
+                  explanation: reading.pcmExplanation,
+                  icon: Icons.ac_unit_rounded,
+                  accentColor: AppColors.pcmCyan,
+                  updatedTimeText: reading.pcmUpdatedText,
+                ),
+                const SizedBox(height: 16),
+                const Text(
+                  'SECONDARY PARAMETERS',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.textSecondary,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Row(
+                  children: [
+                    Expanded(
+                      child: _buildCompactCard(
+                        title: 'GRID POWER',
+                        value: reading.displayGridPower,
+                        statusLevel: reading.gridStatus,
+                        statusText: !reading.isGridValid
+                            ? 'UNAVAIL'
+                            : (reading.gridPower ? 'NORMAL' : 'OUTAGE'),
+                        icon: reading.gridPower
+                            ? Icons.power_rounded
+                            : Icons.power_off_rounded,
+                        iconColor: reading.gridPower
+                            ? AppColors.primary
+                            : AppColors.statusWarning,
+                        bgColor: reading.gridPower
+                            ? AppColors.surface
+                            : AppColors.statusWarningBg,
+                        updatedTimeText: reading.gridUpdatedText,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: _buildCompactCard(
+                        title: 'DOOR',
+                        value: reading.displayDoor,
+                        statusLevel: reading.doorStatus,
+                        statusText: !reading.isDoorValid
+                            ? 'UNAVAIL'
+                            : (reading.doorOpen ? 'WARNING' : 'SECURE'),
+                        icon: reading.doorOpen
+                            ? Icons.door_front_door_outlined
+                            : Icons.meeting_room_rounded,
+                        iconColor: reading.doorOpen
+                            ? AppColors.statusCritical
+                            : AppColors.primary,
+                        bgColor: reading.doorOpen
+                            ? AppColors.statusCriticalBg
+                            : AppColors.surface,
+                        updatedTimeText: reading.doorUpdatedText,
+                      ),
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: _buildCompactCard(
+                        title: 'WATER TANK',
+                        value: reading.displayWaterLevel,
+                        statusLevel: StatusLevel.good,
+                        statusText:
+                            !reading.isWaterValid ? 'UNAVAIL' : 'GOOD',
+                        icon: Icons.opacity_rounded,
+                        iconColor: const Color(0xFF0284C7),
+                        bgColor: AppColors.surface,
+                        updatedTimeText: reading.waterUpdatedText,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ],
-          ),
-          const SizedBox(height: 10),
-
-          // Primary 5-Card Layout:
-          // Top 2: Temperature & Humidity
-          GridView.count(
-            crossAxisCount: 2,
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            mainAxisSpacing: 12,
-            crossAxisSpacing: 12,
-            childAspectRatio: 0.98,
-            children: [
-              // 1. Temperature Card
-              TelemetryCard(
-                title: 'Temperature',
-                value: reading.displayTemperature,
-                status: reading.temperatureStatus,
-                statusText: !reading.isTemperatureValid
-                    ? 'UNAVAILABLE'
-                    : (!isOnline ? 'OFFLINE' : reading.temperatureStatus.label),
-                explanation: reading.temperatureExplanation,
-                icon: Icons.thermostat_rounded,
-                accentColor: AppColors.secondary,
-                updatedTimeText: reading.tempUpdatedText,
-                hasFault: reading.hasTemperatureFault,
-                faultMessage: reading.temperatureFaultReason,
-              ),
-
-              // 2. Humidity Card
-              TelemetryCard(
-                title: 'Humidity',
-                value: reading.displayHumidity,
-                status: reading.humidityStatus,
-                statusText: !reading.isHumidityValid
-                    ? 'UNAVAILABLE'
-                    : (!isOnline ? 'OFFLINE' : reading.humidityStatus.label),
-                explanation: reading.humidityExplanation,
-                icon: Icons.water_drop_rounded,
-                accentColor: const Color(0xFF0284C7),
-                updatedTimeText: reading.humidityUpdatedText,
-                hasFault: reading.hasHumidityFault,
-                faultMessage: reading.humidityFaultReason,
-              ),
-
-              // 3. Battery Card
-              TelemetryCard(
-                title: 'Battery',
-                value: reading.displayBattery,
-                status: reading.batteryStatus,
-                statusText: !reading.isBatteryValid
-                    ? 'UNAVAILABLE'
-                    : (!isOnline ? 'OFFLINE' : reading.batteryStatus.label),
-                explanation: reading.batteryExplanation,
-                icon: Icons.battery_charging_full_rounded,
-                accentColor: AppColors.statusGood,
-                updatedTimeText: reading.batteryUpdatedText,
-                hasFault: reading.hasBatteryFault,
-                faultMessage: reading.batteryFaultReason,
-              ),
-
-              // 4. Solar Power Card
-              TelemetryCard(
-                title: 'Solar Power',
-                value: reading.displaySolar,
-                unit: reading.isSolarValid ? 'W' : null,
-                status: reading.solarStatus,
-                statusText: !reading.isSolarValid
-                    ? 'UNAVAILABLE'
-                    : (!isOnline
-                        ? 'OFFLINE'
-                        : (reading.solarPower > 0 ? 'ACTIVE' : 'INACTIVE')),
-                explanation: reading.solarExplanation,
-                icon: Icons.solar_power_rounded,
-                accentColor: AppColors.solarGold,
-                updatedTimeText: reading.solarUpdatedText,
-                hasFault: reading.hasSolarFault,
-                faultMessage: reading.solarFaultReason,
-              ),
-            ],
-          ),
-
-          const SizedBox(height: 12),
-
-          // 5. PCM Thermal Backup (Hero Card for Cold Storage Reserve)
-          TelemetryCard(
-            title: 'PCM Backup',
-            value: reading.displayPcmHours,
-            status: reading.pcmStatus,
-            statusText: !reading.isPcmValid
-                ? 'UNAVAILABLE'
-                : (!isOnline ? 'OFFLINE' : reading.pcmStatus.systemSafeLabel),
-            explanation: reading.pcmExplanation,
-            icon: Icons.ac_unit_rounded,
-            accentColor: AppColors.pcmCyan,
-            updatedTimeText: reading.pcmUpdatedText,
-          ),
-
-          const SizedBox(height: 16),
-
-          // Secondary Parameters Heading
-          const Text(
-            'SECONDARY PARAMETERS',
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w800,
-              color: AppColors.textSecondary,
-              letterSpacing: 0.5,
-            ),
-          ),
-          const SizedBox(height: 10),
-
-          // Compact 3-Column Row for Grid Power, Door Status, Water Level
-          Row(
-            children: [
-              // Grid Power
-              Expanded(
-                child: _buildCompactCard(
-                  title: 'GRID POWER',
-                  value: reading.displayGridPower,
-                  statusLevel: reading.gridStatus,
-                  statusText: !reading.isGridValid
-                      ? 'UNAVAIL'
-                      : (reading.gridPower ? 'NORMAL' : 'OUTAGE'),
-                  icon: reading.gridPower
-                      ? Icons.power_rounded
-                      : Icons.power_off_rounded,
-                  iconColor: reading.gridPower
-                      ? AppColors.primary
-                      : AppColors.statusWarning,
-                  bgColor: reading.gridPower
-                      ? AppColors.surface
-                      : AppColors.statusWarningBg,
-                  updatedTimeText: reading.gridUpdatedText,
-                ),
-              ),
-              const SizedBox(width: 8),
-
-              // Door Status
-              Expanded(
-                child: _buildCompactCard(
-                  title: 'DOOR',
-                  value: reading.displayDoor,
-                  statusLevel: reading.doorStatus,
-                  statusText: !reading.isDoorValid
-                      ? 'UNAVAIL'
-                      : (reading.doorOpen ? 'WARNING' : 'SECURE'),
-                  icon: reading.doorOpen
-                      ? Icons.door_front_door_outlined
-                      : Icons.meeting_room_rounded,
-                  iconColor: reading.doorOpen
-                      ? AppColors.statusCritical
-                      : AppColors.primary,
-                  bgColor: reading.doorOpen
-                      ? AppColors.statusCriticalBg
-                      : AppColors.surface,
-                  updatedTimeText: reading.doorUpdatedText,
-                ),
-              ),
-              const SizedBox(width: 8),
-
-              // Water Level
-              Expanded(
-                child: _buildCompactCard(
-                  title: 'WATER TANK',
-                  value: reading.displayWaterLevel,
-                  statusLevel: StatusLevel.good,
-                  statusText: !reading.isWaterValid ? 'UNAVAIL' : 'GOOD',
-                  icon: Icons.opacity_rounded,
-                  iconColor: const Color(0xFF0284C7),
-                  bgColor: AppColors.surface,
-                  updatedTimeText: reading.waterUpdatedText,
-                ),
-              ),
-            ],
-          ),
-        ],
+          );
+        },
       ),
     );
   }

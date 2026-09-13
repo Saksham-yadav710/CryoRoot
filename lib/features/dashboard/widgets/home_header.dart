@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/theme/app_colors.dart';
+import '../../../core/widgets/responsive_layout.dart';
 import '../../../state/audio_providers.dart';
 import '../../settings/widgets/voice_settings_sheet.dart';
 import 'direct_connect_modal.dart';
@@ -33,7 +34,9 @@ class HomeHeader extends ConsumerWidget {
       ),
       child: SafeArea(
         bottom: false,
-        child: Row(
+        child: ResponsiveCenter(
+          padding: EdgeInsets.zero,
+          child: Row(
           children: [
             // App Branding Icon & Logo
             Container(
@@ -56,13 +59,16 @@ class HomeHeader extends ConsumerWidget {
                 children: [
                   Row(
                     children: [
-                      const Text(
-                        'CryoRoot',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w800,
-                          letterSpacing: -0.5,
-                          color: AppColors.textPrimary,
+                      const Flexible(
+                        child: Text(
+                          'CryoRoot',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800,
+                            letterSpacing: -0.5,
+                            color: AppColors.textPrimary,
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
                       const SizedBox(width: 4),
@@ -147,13 +153,16 @@ class HomeHeader extends ConsumerWidget {
                 ),
               ),
             ),
-            const SizedBox(width: 4),
+            const SizedBox(width: 2),
             // Offline Direct Sensor Sync Button (Bluetooth / Wi-Fi AP)
             IconButton(
+              visualDensity: VisualDensity.compact,
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
               icon: const Icon(
                 Icons.bluetooth_searching_rounded,
                 color: AppColors.primary,
-                size: 22,
+                size: 20,
               ),
               onPressed: () => DirectConnectModal.show(context),
               tooltip: 'Direct Offline Chamber Sync (BLE / Wi-Fi)',
@@ -161,43 +170,49 @@ class HomeHeader extends ConsumerWidget {
             // Hardware Simulator Button
             if (onSimulatorPressed != null)
               IconButton(
+                visualDensity: VisualDensity.compact,
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
                 icon: const Icon(
                   Icons.tune_rounded,
                   color: AppColors.primaryDark,
-                  size: 22,
+                  size: 20,
                 ),
                 onPressed: onSimulatorPressed,
                 tooltip: 'Hardware Sensor Simulator',
               ),
             // Alerts Button with badge
             IconButton(
+              visualDensity: VisualDensity.compact,
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
               icon: Stack(
                 clipBehavior: Clip.none,
                 children: [
                   const Icon(
                     Icons.notifications_none_rounded,
                     color: AppColors.textPrimary,
-                    size: 22,
+                    size: 20,
                   ),
                   if (unreadAlertsCount > 0)
                     Positioned(
                       right: -2,
                       top: -2,
                       child: Container(
-                        padding: const EdgeInsets.all(4),
+                        padding: const EdgeInsets.all(3),
                         decoration: const BoxDecoration(
                           color: AppColors.statusCritical,
                           shape: BoxShape.circle,
                         ),
                         constraints: const BoxConstraints(
-                          minWidth: 16,
-                          minHeight: 16,
+                          minWidth: 14,
+                          minHeight: 14,
                         ),
                         child: Text(
                           '$unreadAlertsCount',
                           style: const TextStyle(
                             color: Colors.white,
-                            fontSize: 9,
+                            fontSize: 8,
                             fontWeight: FontWeight.w900,
                           ),
                           textAlign: TextAlign.center,
@@ -211,10 +226,13 @@ class HomeHeader extends ConsumerWidget {
             ),
             // Profile & Settings
             IconButton(
+              visualDensity: VisualDensity.compact,
+              padding: EdgeInsets.zero,
+              constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
               icon: const Icon(
                 Icons.account_circle_outlined,
                 color: AppColors.textPrimary,
-                size: 24,
+                size: 22,
               ),
               onPressed: onProfilePressed,
               tooltip: 'Profile & Settings',
@@ -222,6 +240,7 @@ class HomeHeader extends ConsumerWidget {
           ],
         ),
       ),
-    );
-  }
+    ),
+  );
+}
 }
