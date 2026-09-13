@@ -14,15 +14,16 @@ class StorageSecurityEngine {
   /// Rules:
   /// 1. Farmer A can ONLY control cold storages where ownerFarmerId == farmerA.id.
   /// 2. Farmers other than Farmer A (e.g. Farmer B) CANNOT control Farmer A's unit.
-  /// 3. Technicians can control the unit ONLY IF the owner has explicitly granted
-  ///    [isTechnicianAccessGranted].
-  static bool canControlSetpoints(ColdStorageUnit unit, AppUser user) {
+  /// 3. Technicians can control the unit IF the owner has granted
+  ///    [isTechnicianAccessGranted] OR if authenticated in the technician panel [isTechnicianPanelAuth].
+  static bool canControlSetpoints(ColdStorageUnit unit, AppUser user,
+      {bool isTechnicianPanelAuth = false}) {
     if (user.isFarmer) {
       return isOwner(unit, user);
     }
 
     if (user.isTechnician) {
-      return unit.isTechnicianAccessGranted;
+      return unit.isTechnicianAccessGranted || isTechnicianPanelAuth;
     }
 
     return false;

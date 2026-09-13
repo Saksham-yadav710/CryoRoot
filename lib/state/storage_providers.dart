@@ -82,6 +82,7 @@ class StorageUnitsNotifier extends StateNotifier<List<ColdStorageUnit>> {
   bool updateUnitSetpoints(
     String unitId, {
     AppUser? caller,
+    bool isTechnicianPanelAuth = false,
     double? targetTemperature,
     double? targetHumidity,
     double? tempHysteresis,
@@ -94,7 +95,8 @@ class StorageUnitsNotifier extends StateNotifier<List<ColdStorageUnit>> {
 
     // If caller is provided, strictly enforce security engine access
     if (caller != null &&
-        !StorageSecurityEngine.canControlSetpoints(targetUnit, caller)) {
+        !StorageSecurityEngine.canControlSetpoints(targetUnit, caller,
+            isTechnicianPanelAuth: isTechnicianPanelAuth)) {
       return false;
     }
 

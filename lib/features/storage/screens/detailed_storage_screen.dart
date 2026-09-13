@@ -11,6 +11,8 @@ import '../widgets/chamber_setpoint_control_card.dart';
 import '../widgets/farmer_sensor_health_card.dart';
 import '../widgets/technician_hardware_card.dart';
 import '../widgets/user_role_switcher_bar.dart';
+import '../widgets/technician_login_dialog.dart';
+import '../../../state/technician_auth_provider.dart';
 
 class DetailedStorageScreen extends ConsumerStatefulWidget {
   final String unitId;
@@ -463,10 +465,29 @@ class _DetailedStorageScreenState extends ConsumerState<DetailedStorageScreen> {
                     ),
                   ],
                   selected: {_isTechnicianMode},
-                  onSelectionChanged: (set) {
-                    setState(() {
-                      _isTechnicianMode = set.first;
-                    });
+                  onSelectionChanged: (set) async {
+                    final wantsTech = set.first;
+                    if (wantsTech) {
+                      final isAuth =
+                          ref.read(technicianAuthProvider).isAuthenticated;
+                      if (!isAuth) {
+                        final authenticated =
+                            await TechnicianLoginDialog.show(context);
+                        if (authenticated == true && mounted) {
+                          setState(() {
+                            _isTechnicianMode = true;
+                          });
+                        }
+                      } else {
+                        setState(() {
+                          _isTechnicianMode = true;
+                        });
+                      }
+                    } else {
+                      setState(() {
+                        _isTechnicianMode = false;
+                      });
+                    }
                   },
                   style: ButtonStyle(
                     visualDensity: VisualDensity.compact,
@@ -484,6 +505,19 @@ class _DetailedStorageScreenState extends ConsumerState<DetailedStorageScreen> {
               TechnicianHardwareCard(
                 unit: unit,
                 health: analytics.deviceHealth,
+                onLockPanel: () {
+                  ref.read(technicianAuthProvider.notifier).logout();
+                  setState(() {
+                    _isTechnicianMode = false;
+                  });
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Technician panel locked and signed out.'),
+                      duration: Duration(seconds: 2),
+                      behavior: SnackBarBehavior.floating,
+                    ),
+                  );
+                },
               ),
 
             const SizedBox(height: 24),

@@ -337,10 +337,12 @@ void main() {
       );
 
       await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: SingleChildScrollView(
-              child: TechnicianHardwareCard(unit: unit, health: health),
+        ProviderScope(
+          child: MaterialApp(
+            home: Scaffold(
+              body: SingleChildScrollView(
+                child: TechnicianHardwareCard(unit: unit, health: health),
+              ),
             ),
           ),
         ),
