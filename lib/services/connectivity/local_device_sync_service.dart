@@ -12,7 +12,7 @@ class LocalDeviceSyncService {
     return [
       LocalDeviceInfo(
         unitId: 'AC-NER-001',
-        unitName: 'CryoRoot Chamber 1',
+        unitName: 'CryoRoots Chamber 1',
         village: 'Sonapur, Kamrup Metro (Assam)',
         connectionType: LocalConnectionType.bluetoothBle,
         address: 'CR:8B:29:44:A1:01',
@@ -22,7 +22,7 @@ class LocalDeviceSyncService {
       ),
       LocalDeviceInfo(
         unitId: 'AC-NER-002',
-        unitName: 'CryoRoot Chamber 2',
+        unitName: 'CryoRoots Chamber 2',
         village: 'Barapani, Ri-Bhoi (Meghalaya)',
         connectionType: LocalConnectionType.localWifiSoftAp,
         address: '192.168.4.1',
@@ -32,7 +32,7 @@ class LocalDeviceSyncService {
       ),
       LocalDeviceInfo(
         unitId: 'AC-NER-003',
-        unitName: 'CryoRoot Chamber 3',
+        unitName: 'CryoRoots Chamber 3',
         village: 'Sonitpur Orchard Unit (Assam)',
         connectionType: LocalConnectionType.bluetoothBle,
         address: 'CR:8B:29:44:A1:03',

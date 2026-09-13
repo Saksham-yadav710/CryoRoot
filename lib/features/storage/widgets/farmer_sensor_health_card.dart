@@ -220,7 +220,7 @@ class FarmerSensorHealthCard extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          'A local CryoRoot service technician is available 24/7.',
+                          'A local CryoRoots service technician is available 24/7.',
                           style: TextStyle(
                             fontSize: 11,
                             color: AppColors.textSecondary,

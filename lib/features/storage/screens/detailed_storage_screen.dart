@@ -28,6 +28,21 @@ class DetailedStorageScreen extends ConsumerStatefulWidget {
 class _DetailedStorageScreenState extends ConsumerState<DetailedStorageScreen> {
   int _selectedChartTabIndex = 0; // 0: Temp, 1: Battery/Solar, 2: PCM
   bool _isTechnicianMode = false;
+  late String _activeUnitId;
+
+  @override
+  void initState() {
+    super.initState();
+    _activeUnitId = widget.unitId;
+  }
+
+  @override
+  void didUpdateWidget(DetailedStorageScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.unitId != widget.unitId) {
+      _activeUnitId = widget.unitId;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +51,7 @@ class _DetailedStorageScreenState extends ConsumerState<DetailedStorageScreen> {
     final enhancedAudio = ref.watch(enhancedAudioControllerProvider);
 
     final ColdStorageUnit unit = units.firstWhere(
-      (u) => u.id == widget.unitId,
+      (u) => u.id == _activeUnitId,
       orElse: () => units.first,
     );
 
@@ -118,6 +133,101 @@ class _DetailedStorageScreenState extends ConsumerState<DetailedStorageScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+            // Chamber Switcher (Cold Storage 1, 2, 3)
+            Container(
+              margin: const EdgeInsets.only(bottom: 12),
+              padding: const EdgeInsets.all(4),
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.border),
+              ),
+              child: Row(
+                children: units.map((u) {
+                  final isSelected = u.id == _activeUnitId;
+                  return Expanded(
+                    child: InkWell(
+                      key: Key('detailed_chamber_tab_${u.id}'),
+                      onTap: () {
+                        if (_activeUnitId != u.id) {
+                          setState(() {
+                            _activeUnitId = u.id;
+                          });
+                          ref.read(selectedUnitIdProvider.notifier).state = u.id;
+                          if (isAudioPlaying) {
+                            enhancedAudio.stop();
+                          }
+                        }
+                      },
+                      borderRadius: BorderRadius.circular(12),
+                      child: AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8, horizontal: 4),
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? AppColors.primary
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: 6,
+                                  height: 6,
+                                  decoration: BoxDecoration(
+                                    color: isSelected
+                                        ? Colors.white
+                                        : (u.reading.isOnline
+                                            ? AppColors.statusGood
+                                            : AppColors.statusOffline),
+                                    shape: BoxShape.circle,
+                                  ),
+                                ),
+                                const SizedBox(width: 5),
+                                Flexible(
+                                  child: Text(
+                                    u.name,
+                                    textAlign: TextAlign.center,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: isSelected
+                                          ? FontWeight.w800
+                                          : FontWeight.w600,
+                                      color: isSelected
+                                          ? Colors.white
+                                          : AppColors.textPrimary,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 3),
+                            Text(
+                              '${u.reading.temperature.toStringAsFixed(1)}°C • ${u.reading.humidity.toStringAsFixed(0)}%',
+                              style: TextStyle(
+                                fontSize: 10,
+                                fontWeight: FontWeight.w500,
+                                color: isSelected
+                                    ? Colors.white.withValues(alpha: 0.85)
+                                    : AppColors.textSecondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+
             // 0. Active Persona Switcher (Farmer A vs Farmer B vs Field Tech)
             const UserRoleSwitcherBar(),
             const SizedBox(height: 6),

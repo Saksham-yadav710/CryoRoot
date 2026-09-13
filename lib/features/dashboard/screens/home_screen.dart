@@ -345,7 +345,7 @@ class HomeScreen extends ConsumerWidget {
             children: [
               Icon(Icons.logout_rounded, color: Color(0xFFD32F2F)),
               SizedBox(width: 8),
-              Text('Log Out of CryoRoot?'),
+              Text('Log Out of CryoRoots?'),
             ],
           ),
           content: const Text(

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// Standard screen breakpoint definitions for CryoRoot
+/// Standard screen breakpoint definitions for CryoRoots
 class ResponsiveBreakpoints {
   static const double mobileMax = 599.0;
   static const double tabletMax = 899.0;

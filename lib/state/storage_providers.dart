@@ -194,9 +194,9 @@ class StorageUnitsNotifier extends StateNotifier<List<ColdStorageUnit>> {
   }
 }
 
-// 2. Selected Unit ID Provider (Defaults to Unit 1)
+// 2. Selected Unit ID Provider (Defaults to Unit 1, persists user selection across telemetry updates)
 final selectedUnitIdProvider = StateProvider<String>((ref) {
-  final units = ref.watch(storageUnitsProvider);
+  final units = ref.read(storageUnitsProvider);
   return units.isNotEmpty ? units.first.id : 'AC-NER-001';
 });
 
@@ -334,10 +334,10 @@ final selectedUnitAnalyticsProvider = Provider<StorageAnalytics>((ref) {
 // 6. Audio Playback State Provider
 final isAudioPlayingProvider = StateProvider<bool>((ref) => false);
 
-// 8. Active Alerts Provider (Evaluated through AlertRuleEngine)
+// 8. Active Alerts Provider (Evaluated through AlertRuleEngine, listens internally to preserve acknowledgments)
 final activeAlertsProvider =
     StateNotifierProvider<AlertsNotifier, List<AlertItem>>((ref) {
-  final units = ref.watch(storageUnitsProvider);
+  final units = ref.read(storageUnitsProvider);
   return AlertsNotifier(ref, units);
 });
 
