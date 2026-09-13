@@ -227,41 +227,47 @@ class SelectedUnitHeroCard extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
             child: Row(
               children: [
-                // Listen Button
+                // Listen Button with Accessibility Semantics
                 Expanded(
                   flex: 5,
-                  child: ElevatedButton.icon(
-                    onPressed: onListenPressed,
-                    icon: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 200),
-                      child: isPlayingAudio
-                          ? const SizedBox(
-                              width: 18,
-                              height: 18,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2.2,
-                                color: Colors.white,
-                              ),
-                            )
-                          : const Icon(Icons.volume_up_rounded, size: 20),
-                    ),
-                    label: Text(
-                      isPlayingAudio ? 'STOPPING...' : '🔊 LISTEN',
-                      style: const TextStyle(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w800,
-                        letterSpacing: 0.3,
+                  child: Semantics(
+                    button: true,
+                    label: isPlayingAudio
+                        ? 'Stop spoken voice readout'
+                        : 'Listen to spoken voice overview of ${unit.name}',
+                    child: ElevatedButton.icon(
+                      onPressed: onListenPressed,
+                      icon: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 200),
+                        child: isPlayingAudio
+                            ? const SizedBox(
+                                width: 18,
+                                height: 18,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2.2,
+                                  color: Colors.white,
+                                ),
+                              )
+                            : const Icon(Icons.volume_up_rounded, size: 20),
                       ),
-                    ),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: isPlayingAudio
-                          ? AppColors.statusWarning
-                          : AppColors.primaryDark,
-                      foregroundColor: Colors.white,
-                      elevation: 0,
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                      label: Text(
+                        isPlayingAudio ? 'STOPPING...' : '🔊 LISTEN',
+                        style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: 0.3,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: isPlayingAudio
+                            ? AppColors.statusWarning
+                            : AppColors.primaryDark,
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
                       ),
                     ),
                   ),

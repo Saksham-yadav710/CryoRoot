@@ -96,45 +96,53 @@ class HomeHeader extends ConsumerWidget {
                 ],
               ),
             ),
-            // Quick Voice Language Selector Pill
-            InkWell(
-              onTap: () {
-                showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius:
-                        BorderRadius.vertical(top: Radius.circular(24)),
-                  ),
-                  builder: (ctx) => const VoiceSettingsSheet(),
-                );
-              },
-              borderRadius: BorderRadius.circular(16),
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
-                decoration: BoxDecoration(
-                  color: AppColors.background,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: AppColors.border),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      selectedLanguage.flagEmoji,
-                      style: const TextStyle(fontSize: 14),
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      selectedLanguage.code.toUpperCase(),
-                      style: const TextStyle(
-                        fontSize: 11,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.textPrimary,
+            // Quick Voice Language Selector Pill with Accessibility Support
+            Semantics(
+              button: true,
+              label:
+                  'Select voice language, current language is ${selectedLanguage.displayName}',
+              child: Tooltip(
+                message: 'Change voice language (${selectedLanguage.displayName})',
+                child: InkWell(
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(24)),
                       ),
+                      builder: (ctx) => const VoiceSettingsSheet(),
+                    );
+                  },
+                  borderRadius: BorderRadius.circular(16),
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: AppColors.background,
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(color: AppColors.border),
                     ),
-                  ],
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          selectedLanguage.flagEmoji,
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          selectedLanguage.code.toUpperCase(),
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.textPrimary,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ),
