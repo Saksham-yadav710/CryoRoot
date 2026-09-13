@@ -76,9 +76,10 @@ class AuthState {
 class AuthNotifier extends StateNotifier<AuthState> {
   final Ref _ref;
   final AuthSessionService _sessionService;
+  Future<void>? _initFuture;
 
   AuthNotifier(this._ref, this._sessionService) : super(const AuthState()) {
-    initSession();
+    _initFuture = initSession();
   }
 
   /// Restores session on app startup.
@@ -126,6 +127,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     required String pinOrPassword,
     bool rememberMe = true,
   }) async {
+    if (_initFuture != null) await _initFuture;
     state = state.copyWith(isLoading: true, clearError: true);
 
     final cleanId = identifier.trim().toLowerCase().replaceAll(' ', '').replaceAll('-', '');
@@ -151,15 +153,24 @@ class AuthNotifier extends StateNotifier<AuthState> {
         matchedUser = AppUser.farmerB;
       }
     }
-    // General 10-digit number with standard 1234 PIN
-    else if (cleanId.length >= 10 && (cleanPin == '1234' || cleanPin == 'farmer123')) {
-      matchedUser = AppUser(
-        id: 'farmer-${cleanId.substring(cleanId.length - 4)}',
-        name: 'Farmer ($identifier)',
-        phone: identifier,
-        role: UserRole.farmer,
-        ownedUnitIds: ['AC-NER-001'],
-      );
+    // If not Farmer A or B, check dynamically registered farmers on this device
+    if (matchedUser == null) {
+      final registeredFarmer =
+          await _sessionService.authenticateRegisteredFarmer(cleanId, cleanPin);
+      if (registeredFarmer != null) {
+        matchedUser = registeredFarmer;
+      }
+      // General 10-digit number with standard 1234 PIN (Demo fallback)
+      else if (cleanId.length >= 10 &&
+          (cleanPin == '1234' || cleanPin == 'farmer123')) {
+        matchedUser = AppUser(
+          id: 'farmer-${cleanId.substring(cleanId.length - 4)}',
+          name: 'Farmer ($identifier)',
+          phone: identifier,
+          role: UserRole.farmer,
+          ownedUnitIds: ['AC-NER-001'],
+        );
+      }
     }
 
     if (matchedUser != null) {
@@ -178,10 +189,99 @@ class AuthNotifier extends StateNotifier<AuthState> {
     } else {
       state = state.copyWith(
         isLoading: false,
-        errorMessage: 'Invalid Phone Number or PIN. Use Demo: 98765 11001 / PIN: 1234',
+        errorMessage: 'Invalid Mobile Number or PIN. Please check your credentials or register.',
       );
       return false;
     }
+  }
+
+  /// Registers a new farmer client on this device with their custom details.
+  /// Automatically persists their account and logs them in.
+  Future<bool> registerFarmer({
+    required String name,
+    required String phone,
+    required String pin,
+    required List<String> ownedUnitIds,
+    String? village,
+  }) async {
+    if (_initFuture != null) await _initFuture;
+    state = state.copyWith(isLoading: true, clearError: true);
+
+    final cleanName = name.trim();
+    final cleanPhone = phone.trim().replaceAll(' ', '').replaceAll('-', '');
+    final cleanPin = pin.trim();
+
+    if (cleanName.isEmpty) {
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: 'Please enter your full name.',
+      );
+      return false;
+    }
+
+    if (cleanPhone.length < 10) {
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: 'Please enter a valid 10-digit mobile number.',
+      );
+      return false;
+    }
+
+    if (cleanPin.length != 4 || int.tryParse(cleanPin) == null) {
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: 'Please choose a 4-digit numeric PIN.',
+      );
+      return false;
+    }
+
+    // Check if mobile number is already registered
+    final existingFarmers = await _sessionService.getRegisteredFarmersRaw();
+    final isDuplicate = existingFarmers.any((f) {
+      final p = (f['phone'] as String? ?? '').replaceAll(RegExp(r'[\s\-\+]'), '');
+      return p == cleanPhone;
+    });
+
+    if (isDuplicate) {
+      state = state.copyWith(
+        isLoading: false,
+        errorMessage: 'This mobile number is already registered. Please log in.',
+      );
+      return false;
+    }
+
+    final newId = 'farmer-${cleanPhone.substring(cleanPhone.length - 4)}';
+    final assignedUnits =
+        ownedUnitIds.isNotEmpty ? ownedUnitIds : ['AC-NER-001'];
+
+    final newUser = AppUser(
+      id: newId,
+      name: cleanName,
+      phone: phone.trim(),
+      role: UserRole.farmer,
+      ownedUnitIds: assignedUnits,
+    );
+
+    // Save to persistent registry
+    await _sessionService.saveRegisteredFarmer(
+      user: newUser,
+      pin: cleanPin,
+      village: village,
+    );
+
+    // Save active login session
+    await _sessionService.saveSession(newUser, rememberMe: true);
+
+    state = AuthState(
+      isInitialized: true,
+      isAuthenticated: true,
+      currentUser: newUser,
+      errorMessage: null,
+      isLoading: false,
+    );
+
+    _ref.read(currentUserProvider.notifier).setUser(newUser);
+    return true;
   }
 
   /// Technician login with User ID and Password.
@@ -190,6 +290,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     required String password,
     bool rememberMe = true,
   }) async {
+    if (_initFuture != null) await _initFuture;
     state = state.copyWith(isLoading: true, clearError: true);
 
     final isTechAuth = _ref.read(technicianAuthProvider.notifier).login(userId, password);

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../state/auth_providers.dart';
+import '../widgets/farmer_registration_dialog.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -553,7 +554,77 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ),
           ),
         ),
+        const SizedBox(height: 16),
+        const Divider(color: Color(0xFFE0E0E0)),
+        const SizedBox(height: 12),
+
+        // New Farmer Registration Callout
+        Container(
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: const Color(0xFFF1F8E9),
+            borderRadius: BorderRadius.circular(12),
+            border: Border.all(color: const Color(0xFFC8E6C9)),
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: const BoxDecoration(
+                  color: Color(0xFF2E7D32),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(Icons.person_add_rounded,
+                    color: Colors.white, size: 18),
+              ),
+              const SizedBox(width: 10),
+              const Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'New Farmer Client?',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w800,
+                        color: Color(0xFF1B5E20),
+                      ),
+                    ),
+                    Text(
+                      'Register your name, phone & link cold storages',
+                      style: TextStyle(fontSize: 11, color: Color(0xFF2E7D32)),
+                    ),
+                  ],
+                ),
+              ),
+              OutlinedButton(
+                key: const Key('open_farmer_registration_btn'),
+                onPressed: () => _showRegistrationDialog(context),
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: const Color(0xFF1B5E20),
+                  side: const BorderSide(color: Color(0xFF2E7D32), width: 1.5),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                child: const Text(
+                  'REGISTER',
+                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w800),
+                ),
+              ),
+            ],
+          ),
+        ),
       ],
+    );
+  }
+
+  void _showRegistrationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => const FarmerRegistrationDialog(),
     );
   }
 
