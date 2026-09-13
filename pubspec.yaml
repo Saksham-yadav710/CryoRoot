@@ -1,5 +1,5 @@
-name: agricool_ner
-description: "AgriCool NER - Smart Solar Cold Storage Management and Decision Support System for Farmers"
+name: cryoroots
+description: "CryoRoots - Smart Solar Cold Storage Management and Decision Support System for Farmers"
 publish_to: 'none'
 version: 1.0.0+1
 

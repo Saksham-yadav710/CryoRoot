@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:agricool_ner/models/crop_profile.dart';
-import 'package:agricool_ner/services/mock/crop_profiles_data.dart';
-import 'package:agricool_ner/services/crop/crop_condition_lookup_service.dart';
-import 'package:agricool_ner/state/produce_providers.dart';
-import 'package:agricool_ner/features/produce/widgets/crop_autocomplete_selector.dart';
+import 'package:cryoroots/models/crop_profile.dart';
+import 'package:cryoroots/services/mock/crop_profiles_data.dart';
+import 'package:cryoroots/services/crop/crop_condition_lookup_service.dart';
+import 'package:cryoroots/state/produce_providers.dart';
+import 'package:cryoroots/features/produce/widgets/crop_autocomplete_selector.dart';
 
 void main() {
   group('Enormous Crop Profiles Catalog Tests', () {

@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:agricool_ner/models/status_level.dart';
-import 'package:agricool_ner/services/rules/alert_rule_engine.dart';
-import 'package:agricool_ner/state/storage_providers.dart';
+import 'package:cryoroots/models/status_level.dart';
+import 'package:cryoroots/services/rules/alert_rule_engine.dart';
+import 'package:cryoroots/state/storage_providers.dart';
 
 void main() {
   group('Hardware Simulator & Real-Time Telemetry Tests', () {

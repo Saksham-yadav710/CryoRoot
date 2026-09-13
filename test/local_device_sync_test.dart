@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:agricool_ner/models/local_device_info.dart';
-import 'package:agricool_ner/state/local_device_provider.dart';
-import 'package:agricool_ner/state/storage_providers.dart';
+import 'package:cryoroots/models/local_device_info.dart';
+import 'package:cryoroots/state/local_device_provider.dart';
+import 'package:cryoroots/state/storage_providers.dart';
 
 void main() {
   group('Offline Bluetooth & Local Wi-Fi Direct Sync Tests', () {

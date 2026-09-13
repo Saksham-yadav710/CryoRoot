@@ -49,7 +49,7 @@ class MainScaffold extends ConsumerWidget {
                     ),
                     const SizedBox(height: 6),
                     const Text(
-                      'CryoRoot',
+                      'CryoRoots',
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w900,

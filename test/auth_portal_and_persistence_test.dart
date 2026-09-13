@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:agricool_ner/models/app_user.dart';
-import 'package:agricool_ner/services/auth/auth_session_service.dart';
-import 'package:agricool_ner/state/auth_providers.dart';
-import 'package:agricool_ner/state/technician_auth_provider.dart';
-import 'package:agricool_ner/features/auth/screens/login_screen.dart';
+import 'package:cryoroots/models/app_user.dart';
+import 'package:cryoroots/services/auth/auth_session_service.dart';
+import 'package:cryoroots/state/auth_providers.dart';
+import 'package:cryoroots/state/technician_auth_provider.dart';
+import 'package:cryoroots/features/auth/screens/login_screen.dart';
 
 void main() {
   group('🔐 AuthSessionService & Persistent Storage Tests', () {
@@ -191,7 +191,7 @@ void main() {
 
       // Verify branding & tabs
       expect(find.text('Cryo'), findsOneWidget);
-      expect(find.text('Root'), findsOneWidget);
+      expect(find.text('Roots'), findsOneWidget);
       expect(find.text('Farmer Portal'), findsOneWidget);
       expect(find.text('Technician Portal'), findsOneWidget);
 

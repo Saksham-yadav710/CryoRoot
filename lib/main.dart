@@ -40,7 +40,7 @@ class CryoRootApp extends ConsumerWidget {
     final router = ref.watch(appRouterProvider);
 
     return MaterialApp.router(
-      title: 'CryoRoot',
+      title: 'CryoRoots',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       routerConfig: router,

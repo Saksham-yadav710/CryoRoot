@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:agricool_ner/models/cold_storage_unit.dart';
-import 'package:agricool_ner/models/sensor_reading.dart';
-import 'package:agricool_ner/models/status_level.dart';
-import 'package:agricool_ner/models/storage_analytics.dart';
-import 'package:agricool_ner/state/auth_providers.dart';
-import 'package:agricool_ner/state/storage_providers.dart';
-import 'package:agricool_ner/state/technician_auth_provider.dart';
-import 'package:agricool_ner/features/storage/widgets/technician_hardware_card.dart';
-import 'package:agricool_ner/features/storage/widgets/technician_login_dialog.dart';
-import 'package:agricool_ner/features/storage/screens/detailed_storage_screen.dart';
+import 'package:cryoroots/models/cold_storage_unit.dart';
+import 'package:cryoroots/models/sensor_reading.dart';
+import 'package:cryoroots/models/status_level.dart';
+import 'package:cryoroots/models/storage_analytics.dart';
+import 'package:cryoroots/state/auth_providers.dart';
+import 'package:cryoroots/state/storage_providers.dart';
+import 'package:cryoroots/state/technician_auth_provider.dart';
+import 'package:cryoroots/features/storage/widgets/technician_hardware_card.dart';
+import 'package:cryoroots/features/storage/widgets/technician_login_dialog.dart';
+import 'package:cryoroots/features/storage/screens/detailed_storage_screen.dart';
 
 void main() {
   group('🔧 Technician Panel Authentication & Climate Regulation Tests', () {

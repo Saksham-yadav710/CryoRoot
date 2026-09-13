@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:agricool_ner/models/produce_batch.dart';
-import 'package:agricool_ner/models/mandi_market.dart';
-import 'package:agricool_ner/services/mock/crop_profiles_data.dart';
-import 'package:agricool_ner/services/decision/market_decision_engine.dart';
-import 'package:agricool_ner/services/mock/market_data.dart';
+import 'package:cryoroots/models/produce_batch.dart';
+import 'package:cryoroots/models/mandi_market.dart';
+import 'package:cryoroots/services/mock/crop_profiles_data.dart';
+import 'package:cryoroots/services/decision/market_decision_engine.dart';
+import 'package:cryoroots/services/mock/market_data.dart';
 
 void main() {
   group('Market Intelligence & Economic Decision Engine Tests', () {

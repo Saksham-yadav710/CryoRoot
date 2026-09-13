@@ -6,7 +6,7 @@ import '../../models/sensor_reading.dart';
 class LocalDeviceSyncService {
   /// Scans for nearby cold storage chambers broadcasting BLE packets or Local SoftAP Wi-Fi
   Future<List<LocalDeviceInfo>> scanForNearbyChambers() async {
-    // Simulates instant offline radio discovery of nearby AgriCool microcontrollers
+    // Simulates instant offline radio discovery of nearby CryoRoots microcontrollers
     await Future.delayed(const Duration(milliseconds: 600));
 
     return [

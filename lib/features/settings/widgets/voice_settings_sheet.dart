@@ -228,13 +228,13 @@ class VoiceSettingsSheet extends ConsumerWidget {
                       VoiceLanguage.assamese =>
                         'নমস্কাৰ কৃষক বন্ধু। এগ্ৰিকুললৈ স্বাগতম। আপোনাৰ শস্য সম্পূর্ণ নিৰাপদ।',
                       VoiceLanguage.hindi =>
-                        'नमस्ते किसान भाई। एग्रीकूल में आपका स्वागत है। आपकी फसल सुरक्षित है।',
+                        'नमस्ते किसान भाई। क्रायोरूट्स में आपका स्वागत है। आपकी फसल सुरक्षित है।',
                       VoiceLanguage.khasi =>
-                        'Khublei. Ka mar rep jong phi ka shngain ha AgriCool.',
+                        'Khublei. Ka mar rep jong phi ka shngain ha CryoRoots.',
                       VoiceLanguage.manipuri =>
-                        'Khurumjari. AgriCool da nahakki potthok kanna lei.',
+                        'Khurumjari. CryoRoots da nahakki potthok kanna lei.',
                       VoiceLanguage.english =>
-                        'Welcome to AgriCool NER. Your cold storage produce is safe.',
+                        'Welcome to CryoRoots. Your cold storage produce is safe.',
                     };
                     audioController.service.setLanguage(selectedLanguage);
                     audioController.service.setSpeechRate(speechRate);

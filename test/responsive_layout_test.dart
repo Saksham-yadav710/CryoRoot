@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:agricool_ner/core/widgets/responsive_layout.dart';
-import 'package:agricool_ner/features/dashboard/widgets/telemetry_grid.dart';
-import 'package:agricool_ner/features/dashboard/widgets/telemetry_card.dart';
-import 'package:agricool_ner/models/sensor_reading.dart';
-import 'package:agricool_ner/features/navigation/main_scaffold.dart';
+import 'package:cryoroots/core/widgets/responsive_layout.dart';
+import 'package:cryoroots/features/dashboard/widgets/telemetry_grid.dart';
+import 'package:cryoroots/features/dashboard/widgets/telemetry_card.dart';
+import 'package:cryoroots/models/sensor_reading.dart';
+import 'package:cryoroots/features/navigation/main_scaffold.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

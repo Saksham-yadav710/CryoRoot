@@ -1,15 +1,15 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:agricool_ner/models/produce_batch.dart';
-import 'package:agricool_ner/models/status_level.dart';
-import 'package:agricool_ner/core/localization/voice_language.dart';
-import 'package:agricool_ner/services/mock/mock_storage_data.dart';
-import 'package:agricool_ner/services/mock/crop_profiles_data.dart';
-import 'package:agricool_ner/services/mock/market_data.dart';
-import 'package:agricool_ner/services/rules/alert_rule_engine.dart';
-import 'package:agricool_ner/services/decision/market_decision_engine.dart';
-import 'package:agricool_ner/services/audio/natural_voice_generator.dart';
-import 'package:agricool_ner/services/offline/offline_sync_service.dart';
-import 'package:agricool_ner/state/connectivity_provider.dart';
+import 'package:cryoroots/models/produce_batch.dart';
+import 'package:cryoroots/models/status_level.dart';
+import 'package:cryoroots/core/localization/voice_language.dart';
+import 'package:cryoroots/services/mock/mock_storage_data.dart';
+import 'package:cryoroots/services/mock/crop_profiles_data.dart';
+import 'package:cryoroots/services/mock/market_data.dart';
+import 'package:cryoroots/services/rules/alert_rule_engine.dart';
+import 'package:cryoroots/services/decision/market_decision_engine.dart';
+import 'package:cryoroots/services/audio/natural_voice_generator.dart';
+import 'package:cryoroots/services/offline/offline_sync_service.dart';
+import 'package:cryoroots/state/connectivity_provider.dart';
 
 void main() {
   group('🚀 CryoRoot Performance & Micro-Benchmark Suite', () {

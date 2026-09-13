@@ -61,7 +61,7 @@ class HomeHeader extends ConsumerWidget {
                     children: [
                       const Flexible(
                         child: Text(
-                          'CryoRoot',
+                          'CryoRoots',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w800,

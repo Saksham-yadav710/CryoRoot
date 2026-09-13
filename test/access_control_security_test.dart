@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:agricool_ner/models/app_user.dart';
-import 'package:agricool_ner/models/cold_storage_unit.dart';
-import 'package:agricool_ner/models/sensor_reading.dart';
-import 'package:agricool_ner/services/security/storage_security_engine.dart';
-import 'package:agricool_ner/state/auth_providers.dart';
-import 'package:agricool_ner/state/storage_providers.dart';
-import 'package:agricool_ner/features/storage/widgets/chamber_setpoint_control_card.dart';
-import 'package:agricool_ner/features/storage/widgets/user_role_switcher_bar.dart';
+import 'package:cryoroots/models/app_user.dart';
+import 'package:cryoroots/models/cold_storage_unit.dart';
+import 'package:cryoroots/models/sensor_reading.dart';
+import 'package:cryoroots/services/security/storage_security_engine.dart';
+import 'package:cryoroots/state/auth_providers.dart';
+import 'package:cryoroots/state/storage_providers.dart';
+import 'package:cryoroots/features/storage/widgets/chamber_setpoint_control_card.dart';
+import 'package:cryoroots/features/storage/widgets/user_role_switcher_bar.dart';
 
 void main() {
   group('🔐 Cold Storage Ownership & Access Control Security Tests', () {

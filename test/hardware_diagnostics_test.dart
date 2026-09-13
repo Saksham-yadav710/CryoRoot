@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:agricool_ner/models/cold_storage_unit.dart';
-import 'package:agricool_ner/models/sensor_reading.dart';
-import 'package:agricool_ner/models/status_level.dart';
-import 'package:agricool_ner/models/storage_analytics.dart';
-import 'package:agricool_ner/state/storage_providers.dart';
-import 'package:agricool_ner/features/dashboard/widgets/telemetry_card.dart';
-import 'package:agricool_ner/features/storage/widgets/chamber_setpoint_control_card.dart';
-import 'package:agricool_ner/features/storage/widgets/farmer_sensor_health_card.dart';
-import 'package:agricool_ner/features/storage/widgets/technician_hardware_card.dart';
+import 'package:cryoroots/models/cold_storage_unit.dart';
+import 'package:cryoroots/models/sensor_reading.dart';
+import 'package:cryoroots/models/status_level.dart';
+import 'package:cryoroots/models/storage_analytics.dart';
+import 'package:cryoroots/state/storage_providers.dart';
+import 'package:cryoroots/features/dashboard/widgets/telemetry_card.dart';
+import 'package:cryoroots/features/storage/widgets/chamber_setpoint_control_card.dart';
+import 'package:cryoroots/features/storage/widgets/farmer_sensor_health_card.dart';
+import 'package:cryoroots/features/storage/widgets/technician_hardware_card.dart';
 
 void main() {
   group('🛠️ Hardware Diagnostics & Sensor Fault Detection Tests', () {

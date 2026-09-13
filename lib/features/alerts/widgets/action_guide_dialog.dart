@@ -34,7 +34,7 @@ class _ActionGuideDialogState extends State<ActionGuideDialog> {
         'PCM thermal backup is currently active and protecting your produce.',
         'Keep chamber doors strictly closed to minimize cold loss.',
         'Check if main circuit breaker (MCB) on the solar inverter is in UP position.',
-        'Monitor remaining PCM hours in the AgriCool app.',
+        'Monitor remaining PCM hours in the CryoRoots app.',
       ];
     } else if (alert.title.contains('Battery')) {
       return [
@@ -53,7 +53,7 @@ class _ActionGuideDialogState extends State<ActionGuideDialog> {
         'Inspect chamber internal temperature reading on external display.',
         'Ensure ventilation grilles around compressor outdoor unit are unblocked.',
         'Verify power indicator on ESP32 IoT gateway.',
-        'Contact AgriCool Support if temperature does not normalize within 30 minutes.',
+        'Contact CryoRoots Support if temperature does not normalize within 30 minutes.',
       ];
     }
   }

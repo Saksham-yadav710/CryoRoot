@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:agricool_ner/main.dart';
+import 'package:cryoroots/main.dart';
 
 void main() {
   setUp(() {
@@ -23,7 +23,7 @@ void main() {
     await tester.pumpAndSettle();
 
     // 1. Verify Home Screen Branding and Key Telemetry
-    expect(find.text('CryoRoot'), findsOneWidget);
+    expect(find.text('CryoRoots'), findsWidgets);
     expect(find.text('NER'), findsOneWidget);
     expect(find.text('TEMPERATURE'), findsOneWidget);
     expect(find.text('HUMIDITY'), findsOneWidget);

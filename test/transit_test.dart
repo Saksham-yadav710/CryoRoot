@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:agricool_ner/models/transit_manifest.dart';
-import 'package:agricool_ner/state/produce_providers.dart';
-import 'package:agricool_ner/state/transit_providers.dart';
+import 'package:cryoroots/models/transit_manifest.dart';
+import 'package:cryoroots/state/produce_providers.dart';
+import 'package:cryoroots/state/transit_providers.dart';
 
 void main() {
   group('Cold Chain Transit & Dispatch Tests', () {

@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:agricool_ner/models/sensor_reading.dart';
-import 'package:agricool_ner/models/status_level.dart';
-import 'package:agricool_ner/services/mock/mock_storage_data.dart';
+import 'package:cryoroots/models/sensor_reading.dart';
+import 'package:cryoroots/models/status_level.dart';
+import 'package:cryoroots/services/mock/mock_storage_data.dart';
 
 void main() {
   group('SensorReading Status & Explanation Tests', () {

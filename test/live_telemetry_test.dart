@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:agricool_ner/models/sensor_reading.dart';
-import 'package:agricool_ner/models/unit_connection_state.dart';
-import 'package:agricool_ner/models/status_level.dart';
-import 'package:agricool_ner/services/telemetry/mock_live_telemetry_source.dart';
-import 'package:agricool_ner/services/telemetry/telemetry_repository.dart';
+import 'package:cryoroots/models/sensor_reading.dart';
+import 'package:cryoroots/models/unit_connection_state.dart';
+import 'package:cryoroots/models/status_level.dart';
+import 'package:cryoroots/services/telemetry/mock_live_telemetry_source.dart';
+import 'package:cryoroots/services/telemetry/telemetry_repository.dart';
 
 void main() {
   group('🛰️ Live Telemetry & Connection Architecture Tests', () {

@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:agricool_ner/services/offline/offline_sync_service.dart';
-import 'package:agricool_ner/state/connectivity_provider.dart';
+import 'package:cryoroots/services/offline/offline_sync_service.dart';
+import 'package:cryoroots/state/connectivity_provider.dart';
 
 void main() {
   group('Offline Storage & Synchronization Queue Tests', () {

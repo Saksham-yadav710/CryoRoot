@@ -1,11 +1,11 @@
 {
-    "name": "agricool_ner",
-    "short_name": "agricool_ner",
+    "name": "CryoRoots",
+    "short_name": "CryoRoots",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "CryoRoots - Smart Solar Cold Storage Management and Decision Support System for Farmers",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

@@ -179,7 +179,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       const SizedBox(width: 6),
                       Flexible(
                         child: Text(
-                          'AgriCool Solar Cold Storage • NER India Grid',
+                          'CryoRoots Solar Cold Storage • NER India Grid',
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             color: Colors.white.withAlpha(178),
@@ -242,7 +242,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               ),
             ),
             Text(
-              'Root',
+              'Roots',
               style: TextStyle(
                 color: Color(0xFF81C784),
                 fontSize: 30,
