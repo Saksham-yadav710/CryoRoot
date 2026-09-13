@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:agricool_ner/main.dart';
 
 void main() {
+  setUp(() {
+    SharedPreferences.setMockInitialValues({
+      'cryoroot_logged_in_user_id': 'farmer-a',
+      'cryoroot_logged_in_role': 'farmer',
+      'cryoroot_logged_in_remember_me': true,
+    });
+  });
+
   testWidgets('CryoRoot Complete Flow: Home, Detailed, Produce, Market, Alerts',
       (WidgetTester tester) async {
     await tester.pumpWidget(

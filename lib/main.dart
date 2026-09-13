@@ -32,16 +32,18 @@ void main() async {
   );
 }
 
-class CryoRootApp extends StatelessWidget {
+class CryoRootApp extends ConsumerWidget {
   const CryoRootApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final router = ref.watch(appRouterProvider);
+
     return MaterialApp.router(
       title: 'CryoRoot',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
-      routerConfig: appRouter,
+      routerConfig: router,
     );
   }
 }

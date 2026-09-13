@@ -14,6 +14,7 @@ import '../widgets/selected_unit_hero_card.dart';
 import '../widgets/telemetry_grid.dart';
 import '../widgets/recommendation_card.dart';
 import '../../settings/widgets/voice_settings_sheet.dart';
+import '../../../state/auth_providers.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -216,6 +217,7 @@ class HomeScreen extends ConsumerWidget {
 
   void _showProfileModal(BuildContext context, WidgetRef ref) {
     final selectedVoice = ref.watch(selectedVoiceLanguageProvider);
+    final currentUser = ref.watch(currentUserProvider);
 
     showModalBottomSheet(
       context: context,
@@ -233,9 +235,9 @@ class HomeScreen extends ConsumerWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'Farmer Profile & Preferences',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
+                  Text(
+                    currentUser.isTechnician ? 'Technician Profile' : 'Farmer Profile & Preferences',
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800),
                   ),
                   IconButton(
                     icon: const Icon(Icons.close),
@@ -244,14 +246,25 @@ class HomeScreen extends ConsumerWidget {
                 ],
               ),
               const Divider(),
-              const ListTile(
+              ListTile(
                 leading: CircleAvatar(
-                  backgroundColor: AppColors.primary,
-                  child: Icon(Icons.person, color: Colors.white),
+                  backgroundColor: currentUser.isTechnician
+                      ? const Color(0xFF1E3A8A)
+                      : AppColors.primary,
+                  child: Icon(
+                    currentUser.isTechnician
+                        ? Icons.engineering_rounded
+                        : Icons.agriculture_rounded,
+                    color: Colors.white,
+                  ),
                 ),
-                title: Text('Ramesh Borah',
-                    style: TextStyle(fontWeight: FontWeight.w700)),
-                subtitle: Text('Progressive Farmer • Sonitpur, Assam'),
+                title: Text(
+                  currentUser.name,
+                  style: const TextStyle(fontWeight: FontWeight.w700),
+                ),
+                subtitle: Text(
+                  '${currentUser.role.name.toUpperCase()} • ${currentUser.phone.isNotEmpty ? currentUser.phone : currentUser.id}\nChambers: ${currentUser.ownedUnitIds.isEmpty ? 'All Field Units' : currentUser.ownedUnitIds.join(', ')}',
+                ),
               ),
               const SizedBox(height: 10),
               ListTile(
@@ -291,9 +304,70 @@ class HomeScreen extends ConsumerWidget {
                 subtitle: Text('Toll-free 1800-180-1551'),
                 trailing: Icon(Icons.call),
               ),
+              const Divider(),
+              ListTile(
+                leading: const Icon(Icons.logout_rounded, color: Color(0xFFD32F2F)),
+                title: const Text(
+                  'Log Out',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    color: Color(0xFFD32F2F),
+                  ),
+                ),
+                subtitle: const Text(
+                  'Sign out of this device and return to login portal',
+                  style: TextStyle(fontSize: 12),
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                  _showLogoutConfirmationDialog(context, ref);
+                },
+              ),
               const SizedBox(height: 16),
             ],
           ),
+        );
+      },
+    );
+  }
+
+  void _showLogoutConfirmationDialog(BuildContext context, WidgetRef ref) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+          title: const Row(
+            children: [
+              Icon(Icons.logout_rounded, color: Color(0xFFD32F2F)),
+              SizedBox(width: 8),
+              Text('Log Out of CryoRoot?'),
+            ],
+          ),
+          content: const Text(
+            'Are you sure you want to log out? Your saved session on this device will be cleared, and you will need to log in again with your PIN or password.',
+            style: TextStyle(fontSize: 14),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialogContext),
+              child: const Text('CANCEL'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                Navigator.pop(dialogContext);
+                await ref.read(authStateProvider.notifier).logout();
+                if (context.mounted) {
+                  context.go('/login');
+                }
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFFD32F2F),
+                foregroundColor: Colors.white,
+              ),
+              child: const Text('LOG OUT'),
+            ),
+          ],
         );
       },
     );
