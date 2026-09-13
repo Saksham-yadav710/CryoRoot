@@ -63,6 +63,24 @@ class DeviceHealthStatus {
   final int networkSignalRssi; // dBm e.g. -68
   final String connectivityType; // "4G LTE / GSM" or "WiFi Gateway"
 
+  // Technician Hardware & Diagnostic Telemetry
+  final String tempSensorModel;
+  final String tempBusInterface;
+  final double tempRawVoltage;
+  final double tempResistanceOhms;
+  final double tempCalibrationOffset;
+  final String humiditySensorModel;
+  final String humidityBusInterface;
+  final int humidityI2cAddress;
+  final String compressorModel;
+  final double compressorFrequencyHz;
+  final double suctionPressurePsi;
+  final double dischargePressurePsi;
+  final String refrigerantType;
+  final List<String> requiredServiceParts;
+  final String lastCalibrationDate;
+  final int busErrorCount;
+
   const DeviceHealthStatus({
     required this.controllerStatus,
     required this.controllerFirmware,
@@ -73,6 +91,28 @@ class DeviceHealthStatus {
     required this.solarInverterStatus,
     required this.networkSignalRssi,
     required this.connectivityType,
+    this.tempSensorModel = 'NTC 10K 3950 (Class A, IP68)',
+    this.tempBusInterface = '1-Wire (GPIO 4)',
+    this.tempRawVoltage = 1.654,
+    this.tempResistanceOhms = 10240.0,
+    this.tempCalibrationOffset = 0.04,
+    this.humiditySensorModel = 'Sensirion SHT31-DIS (Dual Probe)',
+    this.humidityBusInterface = 'I2C Bus (SDA 21, SCL 22)',
+    this.humidityI2cAddress = 0x44,
+    this.compressorModel = 'Embraco VEMZ9C BLDC Inverter',
+    this.compressorFrequencyHz = 48.0,
+    this.suctionPressurePsi = 28.4,
+    this.dischargePressurePsi = 184.2,
+    this.refrigerantType = 'R134a Eco Grade (280g)',
+    this.requiredServiceParts = const [
+      'Spare NTC 10K Waterproof Probe (Part #NTC-10K-SS)',
+      'Sensirion SHT31 Module (Part #SHT31-MOD)',
+      '10A In-line DC Fast-Blow Fuse (Part #FUSE-10A-DC)',
+      'High-Conductivity Thermal Grease (5g Syringe)',
+      'Silicone Gasket Seal Strip (2.5m)',
+    ],
+    this.lastCalibrationDate = '15 Feb 2026',
+    this.busErrorCount = 0,
   });
 
   bool get isAllHealthy =>

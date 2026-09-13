@@ -28,6 +28,8 @@ class _HardwareSimulatorScreenState
   double _pcmHours = 41.5;
   int _waterLevel = 85;
   bool _isOnline = true;
+  bool _tempSensorFault = false;
+  bool _humiditySensorFault = false;
 
   @override
   void initState() {
@@ -55,6 +57,8 @@ class _HardwareSimulatorScreenState
       _pcmHours = r.pcmReserveHours;
       _waterLevel = r.waterLevel;
       _isOnline = r.isOnline;
+      _tempSensorFault = r.hasTemperatureFault;
+      _humiditySensorFault = r.hasHumidityFault;
     });
   }
 
@@ -71,6 +75,10 @@ class _HardwareSimulatorScreenState
       waterLevel: _waterLevel,
       isOnline: _isOnline,
       timestamp: DateTime.now(),
+      temperatureFaultReason:
+          _tempSensorFault ? 'Hardware probe disconnected / fault' : null,
+      humidityFaultReason:
+          _humiditySensorFault ? 'I2C sensor communication error' : null,
     );
 
     ref
@@ -612,6 +620,54 @@ class _HardwareSimulatorScreenState
                     activeThumbColor: AppColors.primary,
                     onChanged: (v) {
                       setState(() => _isOnline = v);
+                      _syncToProvider();
+                    },
+                  ),
+                  const Divider(height: 10),
+                  SwitchListTile(
+                    title: const Text('Simulate Temp Sensor Fault',
+                        style: TextStyle(
+                            fontSize: 13, fontWeight: FontWeight.w700)),
+                    subtitle: Text(
+                      _tempSensorFault
+                          ? 'PROBE FAULT ACTIVE (Disconnected / Error)'
+                          : 'Probe working normally',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: _tempSensorFault
+                            ? AppColors.statusCritical
+                            : AppColors.statusGood,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    value: _tempSensorFault,
+                    activeThumbColor: AppColors.statusCritical,
+                    onChanged: (v) {
+                      setState(() => _tempSensorFault = v);
+                      _syncToProvider();
+                    },
+                  ),
+                  const Divider(height: 10),
+                  SwitchListTile(
+                    title: const Text('Simulate Humidity Sensor Fault',
+                        style: TextStyle(
+                            fontSize: 13, fontWeight: FontWeight.w700)),
+                    subtitle: Text(
+                      _humiditySensorFault
+                          ? 'I2C FAULT ACTIVE (NACK / Comms Error)'
+                          : 'Probe working normally',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: _humiditySensorFault
+                            ? AppColors.statusCritical
+                            : AppColors.statusGood,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    value: _humiditySensorFault,
+                    activeThumbColor: AppColors.statusCritical,
+                    onChanged: (v) {
+                      setState(() => _humiditySensorFault = v);
                       _syncToProvider();
                     },
                   ),

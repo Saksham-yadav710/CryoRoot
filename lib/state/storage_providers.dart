@@ -77,6 +77,66 @@ class StorageUnitsNotifier extends StateNotifier<List<ColdStorageUnit>> {
     );
   }
 
+  void updateUnitSetpoints(
+    String unitId, {
+    double? targetTemperature,
+    double? targetHumidity,
+    double? tempHysteresis,
+    bool? isDefrostActive,
+  }) {
+    state = [
+      for (final unit in state)
+        if (unit.id == unitId)
+          unit.copyWith(
+            targetTemperature: targetTemperature ?? unit.targetTemperature,
+            targetHumidity: targetHumidity ?? unit.targetHumidity,
+            tempHysteresis: tempHysteresis ?? unit.tempHysteresis,
+            isDefrostActive: isDefrostActive ?? unit.isDefrostActive,
+          )
+        else
+          unit,
+    ];
+  }
+
+  void setSensorFault(
+    String unitId, {
+    bool? tempFault,
+    String? tempReason,
+    bool? humidityFault,
+    String? humidityReason,
+    bool? batteryFault,
+    String? batteryReason,
+    bool? solarFault,
+    String? solarReason,
+  }) {
+    state = [
+      for (final unit in state)
+        if (unit.id == unitId)
+          unit.copyWith(
+            reading: unit.reading.copyWith(
+              clearTemperatureFault: tempFault == false,
+              temperatureFaultReason: tempFault == true
+                  ? (tempReason ?? 'Hardware probe fault')
+                  : null,
+              clearHumidityFault: humidityFault == false,
+              humidityFaultReason: humidityFault == true
+                  ? (humidityReason ?? 'I2C communication error')
+                  : null,
+              clearBatteryFault: batteryFault == false,
+              batteryFaultReason: batteryFault == true
+                  ? (batteryReason ?? 'BMS telemetry fault')
+                  : null,
+              clearSolarFault: solarFault == false,
+              solarFaultReason: solarFault == true
+                  ? (solarReason ?? 'Inverter MPPT comms lost')
+                  : null,
+            ),
+          )
+        else
+          unit,
+    ];
+  }
+
   void refreshFromMock() {
     state = MockStorageData.getUnits();
     _repo?.forceRefreshAll();

@@ -13,6 +13,12 @@ class ColdStorageUnit {
   final String recommendedAction;
   final bool hasActionRequired;
 
+  // Setpoint and operation controls (Farmer & Technician)
+  final double targetTemperature; // °C target setpoint
+  final double targetHumidity; // % target setpoint
+  final double tempHysteresis; // ±°C deadband
+  final bool isDefrostActive;
+
   const ColdStorageUnit({
     required this.id,
     required this.name,
@@ -24,6 +30,10 @@ class ColdStorageUnit {
     required this.reading,
     required this.recommendedAction,
     this.hasActionRequired = false,
+    this.targetTemperature = 4.0,
+    this.targetHumidity = 90.0,
+    this.tempHysteresis = 0.5,
+    this.isDefrostActive = false,
   });
 
   StatusLevel get status => reading.overallStatus;
@@ -95,6 +105,10 @@ class ColdStorageUnit {
     SensorReading? reading,
     String? recommendedAction,
     bool? hasActionRequired,
+    double? targetTemperature,
+    double? targetHumidity,
+    double? tempHysteresis,
+    bool? isDefrostActive,
   }) {
     return ColdStorageUnit(
       id: id ?? this.id,
@@ -107,6 +121,10 @@ class ColdStorageUnit {
       reading: reading ?? this.reading,
       recommendedAction: recommendedAction ?? this.recommendedAction,
       hasActionRequired: hasActionRequired ?? this.hasActionRequired,
+      targetTemperature: targetTemperature ?? this.targetTemperature,
+      targetHumidity: targetHumidity ?? this.targetHumidity,
+      tempHysteresis: tempHysteresis ?? this.tempHysteresis,
+      isDefrostActive: isDefrostActive ?? this.isDefrostActive,
     );
   }
 }

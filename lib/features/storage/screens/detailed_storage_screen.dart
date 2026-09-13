@@ -7,7 +7,9 @@ import '../../../state/audio_providers.dart';
 import '../widgets/metric_stat_card.dart';
 import '../widgets/time_series_chart.dart';
 import '../widgets/power_flow_diagram.dart';
-import '../widgets/device_health_card.dart';
+import '../widgets/chamber_setpoint_control_card.dart';
+import '../widgets/farmer_sensor_health_card.dart';
+import '../widgets/technician_hardware_card.dart';
 
 class DetailedStorageScreen extends ConsumerStatefulWidget {
   final String unitId;
@@ -21,6 +23,7 @@ class DetailedStorageScreen extends ConsumerStatefulWidget {
 
 class _DetailedStorageScreenState extends ConsumerState<DetailedStorageScreen> {
   int _selectedChartTabIndex = 0; // 0: Temp, 1: Battery/Solar, 2: PCM
+  bool _isTechnicianMode = false;
 
   @override
   Widget build(BuildContext context) {
@@ -172,7 +175,15 @@ class _DetailedStorageScreenState extends ConsumerState<DetailedStorageScreen> {
 
             const SizedBox(height: 14),
 
-            // 2. Power Flow & Outage / PCM Reserve Card
+            // 2. Chamber Climate & Setpoint Control (Farmer Presets & Technician Overrides)
+            ChamberSetpointControlCard(
+              unit: unit,
+              isTechnicianMode: _isTechnicianMode,
+            ),
+
+            const SizedBox(height: 16),
+
+            // 3. Power Flow & Outage / PCM Reserve Card
             PowerFlowDiagram(reading: reading),
 
             const SizedBox(height: 16),
@@ -420,11 +431,55 @@ class _DetailedStorageScreenState extends ConsumerState<DetailedStorageScreen> {
 
             const SizedBox(height: 16),
 
-            // 5. Hardware Device & Sensor Diagnostics Card
-            DeviceHealthCard(
-              health: analytics.deviceHealth,
-              deviceId: reading.deviceId,
+            // 5. Sensor Health & Hardware Diagnostics (Farmer vs Technician mode)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  'SENSOR HEALTH & HARDWARE',
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w800,
+                    color: AppColors.textSecondary,
+                    letterSpacing: 0.5,
+                  ),
+                ),
+                SegmentedButton<bool>(
+                  segments: const [
+                    ButtonSegment(
+                      value: false,
+                      label: Text('Farmer View'),
+                      icon: Icon(Icons.person_outline_rounded, size: 14),
+                    ),
+                    ButtonSegment(
+                      value: true,
+                      label: Text('Tech Mode'),
+                      icon: Icon(Icons.engineering_rounded, size: 14),
+                    ),
+                  ],
+                  selected: {_isTechnicianMode},
+                  onSelectionChanged: (set) {
+                    setState(() {
+                      _isTechnicianMode = set.first;
+                    });
+                  },
+                  style: ButtonStyle(
+                    visualDensity: VisualDensity.compact,
+                    textStyle: WidgetStateProperty.all(
+                      const TextStyle(fontSize: 10, fontWeight: FontWeight.w700),
+                    ),
+                  ),
+                ),
+              ],
             ),
+            const SizedBox(height: 10),
+            if (!_isTechnicianMode)
+              FarmerSensorHealthCard(unit: unit)
+            else
+              TechnicianHardwareCard(
+                unit: unit,
+                health: analytics.deviceHealth,
+              ),
 
             const SizedBox(height: 24),
           ],

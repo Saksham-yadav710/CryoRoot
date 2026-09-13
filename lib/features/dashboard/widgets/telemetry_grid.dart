@@ -54,7 +54,7 @@ class TelemetryGrid extends StatelessWidget {
             physics: const NeverScrollableScrollPhysics(),
             mainAxisSpacing: 12,
             crossAxisSpacing: 12,
-            childAspectRatio: 1.08,
+            childAspectRatio: 0.98,
             children: [
               // 1. Temperature Card
               TelemetryCard(
@@ -67,6 +67,9 @@ class TelemetryGrid extends StatelessWidget {
                 explanation: reading.temperatureExplanation,
                 icon: Icons.thermostat_rounded,
                 accentColor: AppColors.secondary,
+                updatedTimeText: reading.tempUpdatedText,
+                hasFault: reading.hasTemperatureFault,
+                faultMessage: reading.temperatureFaultReason,
               ),
 
               // 2. Humidity Card
@@ -80,6 +83,9 @@ class TelemetryGrid extends StatelessWidget {
                 explanation: reading.humidityExplanation,
                 icon: Icons.water_drop_rounded,
                 accentColor: const Color(0xFF0284C7),
+                updatedTimeText: reading.humidityUpdatedText,
+                hasFault: reading.hasHumidityFault,
+                faultMessage: reading.humidityFaultReason,
               ),
 
               // 3. Battery Card
@@ -93,6 +99,9 @@ class TelemetryGrid extends StatelessWidget {
                 explanation: reading.batteryExplanation,
                 icon: Icons.battery_charging_full_rounded,
                 accentColor: AppColors.statusGood,
+                updatedTimeText: reading.batteryUpdatedText,
+                hasFault: reading.hasBatteryFault,
+                faultMessage: reading.batteryFaultReason,
               ),
 
               // 4. Solar Power Card
@@ -109,6 +118,9 @@ class TelemetryGrid extends StatelessWidget {
                 explanation: reading.solarExplanation,
                 icon: Icons.solar_power_rounded,
                 accentColor: AppColors.solarGold,
+                updatedTimeText: reading.solarUpdatedText,
+                hasFault: reading.hasSolarFault,
+                faultMessage: reading.solarFaultReason,
               ),
             ],
           ),
@@ -126,6 +138,7 @@ class TelemetryGrid extends StatelessWidget {
             explanation: reading.pcmExplanation,
             icon: Icons.ac_unit_rounded,
             accentColor: AppColors.pcmCyan,
+            updatedTimeText: reading.pcmUpdatedText,
           ),
 
           const SizedBox(height: 16),
@@ -163,6 +176,7 @@ class TelemetryGrid extends StatelessWidget {
                   bgColor: reading.gridPower
                       ? AppColors.surface
                       : AppColors.statusWarningBg,
+                  updatedTimeText: reading.gridUpdatedText,
                 ),
               ),
               const SizedBox(width: 8),
@@ -185,6 +199,7 @@ class TelemetryGrid extends StatelessWidget {
                   bgColor: reading.doorOpen
                       ? AppColors.statusCriticalBg
                       : AppColors.surface,
+                  updatedTimeText: reading.doorUpdatedText,
                 ),
               ),
               const SizedBox(width: 8),
@@ -199,6 +214,7 @@ class TelemetryGrid extends StatelessWidget {
                   icon: Icons.opacity_rounded,
                   iconColor: const Color(0xFF0284C7),
                   bgColor: AppColors.surface,
+                  updatedTimeText: reading.waterUpdatedText,
                 ),
               ),
             ],
@@ -216,6 +232,7 @@ class TelemetryGrid extends StatelessWidget {
     required IconData icon,
     required Color iconColor,
     required Color bgColor,
+    String? updatedTimeText,
   }) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
@@ -265,16 +282,32 @@ class TelemetryGrid extends StatelessWidget {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
-          const SizedBox(height: 2),
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 9,
-              fontWeight: FontWeight.w700,
-              color: AppColors.textSecondary,
-            ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
+          const SizedBox(height: 3),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 9,
+                    fontWeight: FontWeight.w700,
+                    color: AppColors.textSecondary,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              if (updatedTimeText != null)
+                Text(
+                  updatedTimeText,
+                  style: const TextStyle(
+                    fontSize: 8,
+                    fontWeight: FontWeight.w600,
+                    color: AppColors.textTertiary,
+                  ),
+                ),
+            ],
           ),
         ],
       ),
