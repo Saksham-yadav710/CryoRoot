@@ -9,7 +9,7 @@ class MockStorageData {
     final now = DateTime.now();
 
     return [
-      // Unit 1: Normal Safe Operating Condition
+      // Unit 1: Normal Safe Operating Condition (Owned by Farmer A)
       ColdStorageUnit(
         id: 'AC-NER-001',
         name: 'Cold Storage 1',
@@ -20,6 +20,10 @@ class MockStorageData {
         primaryProduce: 'Tomato (2000kg), Green Chilli (1450kg)',
         recommendedAction: 'No action needed. Storage conditions are optimal.',
         hasActionRequired: false,
+        ownerFarmerId: 'farmer-a',
+        ownerFarmerName: 'Ramesh Patel (Farmer A)',
+        ownerContact: '+91 98765 11001',
+        isTechnicianAccessGranted: false,
         reading: SensorReading(
           deviceId: 'AC-DEV-001',
           temperature: 4.2,
@@ -35,7 +39,7 @@ class MockStorageData {
         ),
       ),
 
-      // Unit 2: Power Outage / Running on PCM Backup
+      // Unit 2: Power Outage / Running on PCM Backup (Owned by Farmer A)
       ColdStorageUnit(
         id: 'AC-NER-002',
         name: 'Cold Storage 2',
@@ -47,6 +51,10 @@ class MockStorageData {
         recommendedAction:
             'Grid outage active. System is running securely on Solar & PCM backup.',
         hasActionRequired: false,
+        ownerFarmerId: 'farmer-a',
+        ownerFarmerName: 'Ramesh Patel (Farmer A)',
+        ownerContact: '+91 98765 11001',
+        isTechnicianAccessGranted: false,
         reading: SensorReading(
           deviceId: 'AC-DEV-002',
           temperature: 5.4,
@@ -62,7 +70,7 @@ class MockStorageData {
         ),
       ),
 
-      // Unit 3: Door Open / Elevated Temperature Alert
+      // Unit 3: Door Open / Elevated Temperature Alert (Owned by Farmer B)
       ColdStorageUnit(
         id: 'AC-NER-003',
         name: 'Cold Storage 3',
@@ -73,6 +81,10 @@ class MockStorageData {
         primaryProduce: 'Orange (1200kg), Leafy Veg (600kg)',
         recommendedAction: 'Check and close the storage door immediately.',
         hasActionRequired: true,
+        ownerFarmerId: 'farmer-b',
+        ownerFarmerName: 'Suresh Kumar (Farmer B)',
+        ownerContact: '+91 98765 22002',
+        isTechnicianAccessGranted: false,
         reading: SensorReading(
           deviceId: 'AC-DEV-003',
           temperature: 10.5, // High

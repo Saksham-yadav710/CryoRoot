@@ -117,6 +117,28 @@ class SelectedUnitHeroCard extends StatelessWidget {
                           ),
                         ],
                       ),
+                      const SizedBox(height: 4),
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.shield_outlined,
+                            size: 13,
+                            color: AppColors.primaryDark.withValues(alpha: 0.8),
+                          ),
+                          const SizedBox(width: 4),
+                          Flexible(
+                            child: Text(
+                              'Owner: ${unit.ownerFarmerName}${unit.isTechnicianAccessGranted ? ' • 🔧 Tech Authorized' : ''}',
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.primaryDark.withValues(alpha: 0.9),
+                              ),
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
                 ),

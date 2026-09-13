@@ -10,6 +10,7 @@ import '../widgets/power_flow_diagram.dart';
 import '../widgets/chamber_setpoint_control_card.dart';
 import '../widgets/farmer_sensor_health_card.dart';
 import '../widgets/technician_hardware_card.dart';
+import '../widgets/user_role_switcher_bar.dart';
 
 class DetailedStorageScreen extends ConsumerStatefulWidget {
   final String unitId;
@@ -113,6 +114,10 @@ class _DetailedStorageScreenState extends ConsumerState<DetailedStorageScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // 0. Active Persona Switcher (Farmer A vs Farmer B vs Field Tech)
+            const UserRoleSwitcherBar(),
+            const SizedBox(height: 6),
+
             // 1. Voice Diagnostic Briefing Action Bar
             Container(
               padding: const EdgeInsets.all(12),

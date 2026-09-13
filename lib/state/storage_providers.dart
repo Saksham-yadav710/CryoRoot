@@ -6,8 +6,10 @@ import '../models/status_level.dart';
 import '../models/alert_item.dart';
 import '../models/storage_analytics.dart';
 import '../models/unit_connection_state.dart';
+import '../models/app_user.dart';
 import '../services/mock/mock_storage_data.dart';
 import '../services/rules/alert_rule_engine.dart';
+import '../services/security/storage_security_engine.dart';
 import '../services/telemetry/telemetry_repository.dart';
 
 // 0. Telemetry Repository Provider (Hardware-Independent Ingestion & Freshness Engine)
@@ -77,13 +79,25 @@ class StorageUnitsNotifier extends StateNotifier<List<ColdStorageUnit>> {
     );
   }
 
-  void updateUnitSetpoints(
+  bool updateUnitSetpoints(
     String unitId, {
+    AppUser? caller,
     double? targetTemperature,
     double? targetHumidity,
     double? tempHysteresis,
     bool? isDefrostActive,
   }) {
+    final unitIndex = state.indexWhere((u) => u.id == unitId);
+    if (unitIndex == -1) return false;
+
+    final targetUnit = state[unitIndex];
+
+    // If caller is provided, strictly enforce security engine access
+    if (caller != null &&
+        !StorageSecurityEngine.canControlSetpoints(targetUnit, caller)) {
+      return false;
+    }
+
     state = [
       for (final unit in state)
         if (unit.id == unitId)
@@ -96,6 +110,35 @@ class StorageUnitsNotifier extends StateNotifier<List<ColdStorageUnit>> {
         else
           unit,
     ];
+    return true;
+  }
+
+  bool toggleTechnicianAccess(
+    String unitId, {
+    required AppUser caller,
+    required bool grantAccess,
+  }) {
+    final unitIndex = state.indexWhere((u) => u.id == unitId);
+    if (unitIndex == -1) return false;
+
+    final targetUnit = state[unitIndex];
+
+    // Only the registered owner farmer can grant or revoke technician access
+    if (!StorageSecurityEngine.canToggleTechnicianAccess(targetUnit, caller)) {
+      return false;
+    }
+
+    state = [
+      for (final unit in state)
+        if (unit.id == unitId)
+          unit.copyWith(
+            isTechnicianAccessGranted: grantAccess,
+            technicianAccessGrantedAt: grantAccess ? DateTime.now() : null,
+          )
+        else
+          unit,
+    ];
+    return true;
   }
 
   void setSensorFault(

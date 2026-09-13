@@ -19,6 +19,13 @@ class ColdStorageUnit {
   final double tempHysteresis; // ±°C deadband
   final bool isDefrostActive;
 
+  // Ownership & Security controls
+  final String ownerFarmerId;
+  final String ownerFarmerName;
+  final String ownerContact;
+  final bool isTechnicianAccessGranted;
+  final DateTime? technicianAccessGrantedAt;
+
   const ColdStorageUnit({
     required this.id,
     required this.name,
@@ -34,6 +41,11 @@ class ColdStorageUnit {
     this.targetHumidity = 90.0,
     this.tempHysteresis = 0.5,
     this.isDefrostActive = false,
+    this.ownerFarmerId = 'farmer-a',
+    this.ownerFarmerName = 'Ramesh Patel (Farmer A)',
+    this.ownerContact = '+91 98765 11001',
+    this.isTechnicianAccessGranted = false,
+    this.technicianAccessGrantedAt,
   });
 
   StatusLevel get status => reading.overallStatus;
@@ -109,6 +121,11 @@ class ColdStorageUnit {
     double? targetHumidity,
     double? tempHysteresis,
     bool? isDefrostActive,
+    String? ownerFarmerId,
+    String? ownerFarmerName,
+    String? ownerContact,
+    bool? isTechnicianAccessGranted,
+    DateTime? technicianAccessGrantedAt,
   }) {
     return ColdStorageUnit(
       id: id ?? this.id,
@@ -125,6 +142,13 @@ class ColdStorageUnit {
       targetHumidity: targetHumidity ?? this.targetHumidity,
       tempHysteresis: tempHysteresis ?? this.tempHysteresis,
       isDefrostActive: isDefrostActive ?? this.isDefrostActive,
+      ownerFarmerId: ownerFarmerId ?? this.ownerFarmerId,
+      ownerFarmerName: ownerFarmerName ?? this.ownerFarmerName,
+      ownerContact: ownerContact ?? this.ownerContact,
+      isTechnicianAccessGranted:
+          isTechnicianAccessGranted ?? this.isTechnicianAccessGranted,
+      technicianAccessGrantedAt:
+          technicianAccessGrantedAt ?? this.technicianAccessGrantedAt,
     );
   }
 }
