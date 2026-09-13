@@ -117,7 +117,8 @@ class VoiceSettingsSheet extends ConsumerWidget {
                               : AppColors.textTertiary,
                           width: 2,
                         ),
-                        color: isSelected ? AppColors.primary : Colors.transparent,
+                        color:
+                            isSelected ? AppColors.primary : Colors.transparent,
                       ),
                       child: isSelected
                           ? const Center(
@@ -138,8 +139,9 @@ class VoiceSettingsSheet extends ConsumerWidget {
                             '${lang.nativeName} (${lang.displayName})',
                             style: TextStyle(
                               fontSize: 14,
-                              fontWeight:
-                                  isSelected ? FontWeight.w800 : FontWeight.w600,
+                              fontWeight: isSelected
+                                  ? FontWeight.w800
+                                  : FontWeight.w600,
                               color: isSelected
                                   ? AppColors.primaryDark
                                   : AppColors.textPrimary,

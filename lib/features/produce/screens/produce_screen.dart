@@ -130,9 +130,9 @@ class ProduceScreen extends ConsumerWidget {
                 children: [
                   Expanded(
                     child: InkWell(
-                      onTap: () =>
-                          ref.read(produceTabSelectionProvider.notifier).state =
-                              0,
+                      onTap: () => ref
+                          .read(produceTabSelectionProvider.notifier)
+                          .state = 0,
                       borderRadius: BorderRadius.circular(9),
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 8),
@@ -158,9 +158,9 @@ class ProduceScreen extends ConsumerWidget {
                   ),
                   Expanded(
                     child: InkWell(
-                      onTap: () =>
-                          ref.read(produceTabSelectionProvider.notifier).state =
-                              1,
+                      onTap: () => ref
+                          .read(produceTabSelectionProvider.notifier)
+                          .state = 1,
                       borderRadius: BorderRadius.circular(9),
                       child: Container(
                         padding: const EdgeInsets.symmetric(vertical: 8),
@@ -529,8 +529,7 @@ class ProduceScreen extends ConsumerWidget {
   }
 
   Widget _buildTransitTile(BuildContext context, TransitManifest manifest) {
-    final isWarning =
-        manifest.status == TransitStatus.temperatureWarning;
+    final isWarning = manifest.status == TransitStatus.temperatureWarning;
     final isDelivered = manifest.status == TransitStatus.delivered;
 
     return InkWell(

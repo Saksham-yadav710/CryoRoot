@@ -26,15 +26,19 @@ void main() {
 
       stopwatch.stop();
       final totalMs = stopwatch.elapsedMilliseconds;
-      final perOpUs = (stopwatch.elapsedMicroseconds / iterations).toStringAsFixed(2);
+      final perOpUs =
+          (stopwatch.elapsedMicroseconds / iterations).toStringAsFixed(2);
 
       // ignore: avoid_print
-      print('\n[BENCHMARK] AlertRuleEngine: $iterations evaluations in ${totalMs}ms ($perOpUs µs/op)');
-      expect(totalMs, lessThan(1000), reason: 'Must complete 10k evaluations in under 1 second');
+      print(
+          '\n[BENCHMARK] AlertRuleEngine: $iterations evaluations in ${totalMs}ms ($perOpUs µs/op)');
+      expect(totalMs, lessThan(1000),
+          reason: 'Must complete 10k evaluations in under 1 second');
     });
 
     test('Benchmark: Thermal Shelf-Life & Kinetic Degradation Engine', () {
-      final tomato = CropProfilesData.getProfiles().firstWhere((c) => c.id == 'CROP-TOMATO');
+      final tomato = CropProfilesData.getProfiles()
+          .firstWhere((c) => c.id == 'CROP-TOMATO');
       final batch = ProduceBatch(
         batchId: 'BENCH-001',
         cropProfile: tomato,
@@ -57,12 +61,15 @@ void main() {
 
       stopwatch.stop();
       final totalMs = stopwatch.elapsedMilliseconds;
-      final perOpUs = (stopwatch.elapsedMicroseconds / iterations).toStringAsFixed(2);
+      final perOpUs =
+          (stopwatch.elapsedMicroseconds / iterations).toStringAsFixed(2);
 
       // ignore: avoid_print
-      print('[BENCHMARK] Thermal Degradation Engine: $iterations calculations in ${totalMs}ms ($perOpUs µs/op)');
+      print(
+          '[BENCHMARK] Thermal Degradation Engine: $iterations calculations in ${totalMs}ms ($perOpUs µs/op)');
       expect(sumDays, greaterThan(0));
-      expect(totalMs, lessThan(500), reason: 'Must complete 20k calculations in under 500ms');
+      expect(totalMs, lessThan(500),
+          reason: 'Must complete 20k calculations in under 500ms');
     });
 
     test('Benchmark: APMC Market Decision & EVA Profit Optimization', () {
@@ -79,7 +86,8 @@ void main() {
       final stopwatch = Stopwatch()..start();
 
       for (int i = 0; i < iterations; i++) {
-        final quotes = MarketDataService.getQuotesForCrop(CropProfilesData.khasiMandarin.id);
+        final quotes = MarketDataService.getQuotesForCrop(
+            CropProfilesData.khasiMandarin.id);
         final decision = MarketDecisionEngine.evaluateBatch(
           batch: batch,
           currentChamberTemp: 4.2,
@@ -90,14 +98,19 @@ void main() {
 
       stopwatch.stop();
       final totalMs = stopwatch.elapsedMilliseconds;
-      final perOpUs = (stopwatch.elapsedMicroseconds / iterations).toStringAsFixed(2);
+      final perOpUs =
+          (stopwatch.elapsedMicroseconds / iterations).toStringAsFixed(2);
 
       // ignore: avoid_print
-      print('[BENCHMARK] APMC Decision & EVA Engine: $iterations evaluations in ${totalMs}ms ($perOpUs µs/op)');
-      expect(totalMs, lessThan(800), reason: 'Must complete 5k evaluations in under 800ms');
+      print(
+          '[BENCHMARK] APMC Decision & EVA Engine: $iterations evaluations in ${totalMs}ms ($perOpUs µs/op)');
+      expect(totalMs, lessThan(800),
+          reason: 'Must complete 5k evaluations in under 800ms');
     });
 
-    test('Benchmark: Multilingual Natural Voice Synthesis (5 Regional Dialects)', () {
+    test(
+        'Benchmark: Multilingual Natural Voice Synthesis (5 Regional Dialects)',
+        () {
       final languages = [
         VoiceLanguage.assamese,
         VoiceLanguage.khasi,
@@ -122,11 +135,15 @@ void main() {
 
       stopwatch.stop();
       final totalMs = stopwatch.elapsedMilliseconds;
-      final perSentenceUs = (stopwatch.elapsedMicroseconds / (iterations * languages.length)).toStringAsFixed(2);
+      final perSentenceUs =
+          (stopwatch.elapsedMicroseconds / (iterations * languages.length))
+              .toStringAsFixed(2);
 
       // ignore: avoid_print
-      print('[BENCHMARK] Voice Generator: ${iterations * languages.length} synthesized sentences in ${totalMs}ms ($perSentenceUs µs/sentence, Total chars: $charCount)');
-      expect(totalMs, lessThan(1000), reason: 'Must synthesize 5,000 multi-dialect sentences in under 1s');
+      print(
+          '[BENCHMARK] Voice Generator: ${iterations * languages.length} synthesized sentences in ${totalMs}ms ($perSentenceUs µs/sentence, Total chars: $charCount)');
+      expect(totalMs, lessThan(1000),
+          reason: 'Must synthesize 5,000 multi-dialect sentences in under 1s');
     });
 
     test('Benchmark: Offline Cache Queue & State Transactions', () {
@@ -153,10 +170,12 @@ void main() {
       stopwatch.stop();
 
       final totalMs = stopwatch.elapsedMilliseconds;
-      final perActionUs = (stopwatch.elapsedMicroseconds / actionCount).toStringAsFixed(2);
+      final perActionUs =
+          (stopwatch.elapsedMicroseconds / actionCount).toStringAsFixed(2);
 
       // ignore: avoid_print
-      print('[BENCHMARK] Offline Cache Queue: $actionCount actions queued in ${totalMs}ms ($perActionUs µs/action)');
+      print(
+          '[BENCHMARK] Offline Cache Queue: $actionCount actions queued in ${totalMs}ms ($perActionUs µs/action)');
       expect(totalMs, lessThan(500));
     });
   });

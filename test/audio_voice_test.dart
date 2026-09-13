@@ -106,7 +106,8 @@ void main() {
     });
 
     test('Generates Multilingual Alert Speeches', () {
-      final alerts = AlertRuleEngine.evaluateAllUnits(MockStorageData.getUnits());
+      final alerts =
+          AlertRuleEngine.evaluateAllUnits(MockStorageData.getUnits());
       expect(alerts.isNotEmpty, isTrue);
       final alert = alerts.first;
 

@@ -102,7 +102,8 @@ class HomeHeader extends ConsumerWidget {
               label:
                   'Select voice language, current language is ${selectedLanguage.displayName}',
               child: Tooltip(
-                message: 'Change voice language (${selectedLanguage.displayName})',
+                message:
+                    'Change voice language (${selectedLanguage.displayName})',
                 child: InkWell(
                   onTap: () {
                     showModalBottomSheet(

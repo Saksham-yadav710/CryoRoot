@@ -28,7 +28,9 @@ void main() {
       expect(updatedUnit.status, StatusLevel.warning);
 
       final alerts = AlertRuleEngine.evaluateUnit(updatedUnit);
-      expect(alerts.any((a) => a.title.contains('High Temperature & Door Open')), true);
+      expect(
+          alerts.any((a) => a.title.contains('High Temperature & Door Open')),
+          true);
       expect(alerts.any((a) => a.severity == StatusLevel.critical), true);
     });
 
@@ -54,7 +56,9 @@ void main() {
       expect(alerts.any((a) => a.title.contains('Grid Power Outage')), true);
     });
 
-    test('Simulating Low Battery triggers Warning and battery conservation guidance', () {
+    test(
+        'Simulating Low Battery triggers Warning and battery conservation guidance',
+        () {
       final notifier = StorageUnitsNotifier();
       final initialUnit = notifier.state.first;
 
@@ -73,7 +77,8 @@ void main() {
       expect(updatedUnit.reading.batteryStatus, StatusLevel.critical);
 
       final alerts = AlertRuleEngine.evaluateUnit(updatedUnit);
-      expect(alerts.any((a) => a.title.contains('Battery Backup Depleting')), true);
+      expect(alerts.any((a) => a.title.contains('Battery Backup Depleting')),
+          true);
     });
 
     test('Simulating Offline chamber marks unit as Offline', () {

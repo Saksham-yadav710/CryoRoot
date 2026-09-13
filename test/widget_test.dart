@@ -23,7 +23,8 @@ void main() {
     expect(find.text('PCM BACKUP'), findsOneWidget);
 
     // 2. Navigate to Detailed Storage Screen
-    await tester.tap(find.text('DETAILED DATA'));
+    await tester.ensureVisible(find.text('DETAILED DATA'));
+    await tester.tap(find.text('DETAILED DATA'), warnIfMissed: false);
     await tester.pumpAndSettle();
     expect(find.text('Cold Storage 1 Analytics'), findsOneWidget);
     expect(find.text('24-HOUR ANALYTICS & TRENDS'), findsOneWidget);
@@ -43,7 +44,8 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Market Intelligence & Advisory'), findsOneWidget);
     expect(find.text('STORED PRODUCE DECISION ADVISORIES'), findsOneWidget);
-    expect(find.text('REGIONAL WHOLESALE MANDI PRICES (TODAY)'), findsOneWidget);
+    expect(
+        find.text('REGIONAL WHOLESALE MANDI PRICES (TODAY)'), findsOneWidget);
 
     // 6. Navigate to Alerts Tab
     await tester.tap(find.text('Alerts'));

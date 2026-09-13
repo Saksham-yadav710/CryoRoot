@@ -133,8 +133,7 @@ class TransitManifest {
     }
   }
 
-  double get estimatedTotalValue =>
-      quantityKg * cropProfile.defaultPricePerKg;
+  double get estimatedTotalValue => quantityKg * cropProfile.defaultPricePerKg;
 
   TransitManifest copyWith({
     String? manifestId,
@@ -168,8 +167,7 @@ class TransitManifest {
       transitMode: transitMode ?? this.transitMode,
       status: status ?? this.status,
       departureTime: departureTime ?? this.departureTime,
-      estimatedArrivalTime:
-          estimatedArrivalTime ?? this.estimatedArrivalTime,
+      estimatedArrivalTime: estimatedArrivalTime ?? this.estimatedArrivalTime,
       currentTemp: currentTemp ?? this.currentTemp,
       currentHumidity: currentHumidity ?? this.currentHumidity,
       batteryOrPcmHours: batteryOrPcmHours ?? this.batteryOrPcmHours,

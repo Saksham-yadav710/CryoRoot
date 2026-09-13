@@ -3,7 +3,8 @@ import '../../models/mandi_market.dart';
 import '../mock/market_data.dart';
 
 class MarketDecisionEngine {
-  static const double solarColdStorageCostPerKgPerDay = 0.25; // ₹0.25 / kg / day
+  static const double solarColdStorageCostPerKgPerDay =
+      0.25; // ₹0.25 / kg / day
 
   static MarketDecision evaluateBatch({
     required ProduceBatch batch,
@@ -20,12 +21,15 @@ class MarketDecisionEngine {
       }
     }
 
-    final double holdingDays = (remainingDays >= 7) ? 7.0 : remainingDays.toDouble();
-    final double storageCostPerKg = holdingDays * solarColdStorageCostPerKgPerDay;
+    final double holdingDays =
+        (remainingDays >= 7) ? 7.0 : remainingDays.toDouble();
+    final double storageCostPerKg =
+        holdingDays * solarColdStorageCostPerKgPerDay;
 
     final double priceDiffPerKg =
         bestMandi.projectedPrice7DaysPerKg - bestMandi.currentPricePerKg;
-    final double netGainPerKg = priceDiffPerKg - storageCostPerKg - bestMandi.transportCostPerKg;
+    final double netGainPerKg =
+        priceDiffPerKg - storageCostPerKg - bestMandi.transportCostPerKg;
     final double totalExpectedGain = netGainPerKg * batch.quantityKg;
 
     // Decision Logic

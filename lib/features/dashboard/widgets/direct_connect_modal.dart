@@ -61,8 +61,8 @@ class DirectConnectModal extends ConsumerWidget {
                 ],
               ),
               IconButton(
-                icon: const Icon(Icons.refresh_rounded,
-                    color: AppColors.primary),
+                icon:
+                    const Icon(Icons.refresh_rounded, color: AppColors.primary),
                 tooltip: 'Scan for Nearby Chambers',
                 onPressed: () => notifier.scanNearby(),
               ),
@@ -99,9 +99,7 @@ class DirectConnectModal extends ConsumerWidget {
                       : AppColors.surface,
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(
-                    color: isConnected
-                        ? AppColors.primary
-                        : AppColors.border,
+                    color: isConnected ? AppColors.primary : AppColors.border,
                     width: isConnected ? 1.5 : 1.0,
                   ),
                 ),

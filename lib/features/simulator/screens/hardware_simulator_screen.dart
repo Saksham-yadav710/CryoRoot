@@ -33,8 +33,7 @@ class _HardwareSimulatorScreenState
   void initState() {
     super.initState();
     final units = ref.read(storageUnitsProvider);
-    _selectedUnitId =
-        units.isNotEmpty ? units.first.id : 'AC-NER-001';
+    _selectedUnitId = units.isNotEmpty ? units.first.id : 'AC-NER-001';
     _loadUnitValues(_selectedUnitId);
   }
 
@@ -77,6 +76,13 @@ class _HardwareSimulatorScreenState
     ref
         .read(storageUnitsProvider.notifier)
         .updateSensorReading(_selectedUnitId, newReading);
+
+    final repo = ref.read(telemetryRepositoryProvider);
+    if (!_isOnline) {
+      repo.simulateDisconnect(_selectedUnitId);
+    } else {
+      repo.simulateReconnect(_selectedUnitId);
+    }
   }
 
   void _applyPreset({

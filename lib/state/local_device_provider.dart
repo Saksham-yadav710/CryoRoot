@@ -8,7 +8,8 @@ final localDeviceSyncServiceProvider = Provider((ref) {
 });
 
 final nearbyLocalDevicesProvider =
-    StateNotifierProvider<NearbyLocalDevicesNotifier, List<LocalDeviceInfo>>((ref) {
+    StateNotifierProvider<NearbyLocalDevicesNotifier, List<LocalDeviceInfo>>(
+        (ref) {
   return NearbyLocalDevicesNotifier(ref);
 });
 

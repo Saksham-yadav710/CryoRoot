@@ -5,13 +5,15 @@ import '../services/mock/crop_profiles_data.dart';
 import 'produce_providers.dart';
 
 final transitManifestsProvider =
-    StateNotifierProvider<TransitManifestsNotifier, List<TransitManifest>>((ref) {
+    StateNotifierProvider<TransitManifestsNotifier, List<TransitManifest>>(
+        (ref) {
   return TransitManifestsNotifier(ref);
 });
 
 class TransitManifestsNotifier extends StateNotifier<List<TransitManifest>> {
   final Ref ref;
-  static int _manifestCounter = 83; // starts after the 2 seeded manifests (0081, 0082)
+  static int _manifestCounter =
+      83; // starts after the 2 seeded manifests (0081, 0082)
 
   TransitManifestsNotifier(this.ref) : super(_getInitialManifests());
 
@@ -82,7 +84,8 @@ class TransitManifestsNotifier extends StateNotifier<List<TransitManifest>> {
         vehicleNumber: 'ML-05-D-4311',
         driverName: 'Kitdor Wahlang',
         driverPhone: '+91 98620 48192',
-        buyerNotes: 'Pre-cooled Avinash tomato crates in sealed PCM insulation.',
+        buyerNotes:
+            'Pre-cooled Avinash tomato crates in sealed PCM insulation.',
         telemetryLogs: [
           TransitDataPoint(
             timestamp: now.subtract(const Duration(hours: 3)),

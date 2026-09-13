@@ -4,7 +4,9 @@ import 'package:agricool_ner/state/connectivity_provider.dart';
 
 void main() {
   group('Offline Storage & Synchronization Queue Tests', () {
-    test('Offline cache initializes with cached telemetry and 0 pending actions', () {
+    test(
+        'Offline cache initializes with cached telemetry and 0 pending actions',
+        () {
       final notifier = OfflineCacheNotifier(
         OfflineStorageCache(
           lastCachedTime: DateTime.now(),
@@ -37,11 +39,13 @@ void main() {
       );
 
       expect(notifier.state.pendingQueueCount, 2);
-      expect(notifier.state.syncQueue.first.type, SyncActionType.addProduceBatch);
+      expect(
+          notifier.state.syncQueue.first.type, SyncActionType.addProduceBatch);
       expect(notifier.state.syncQueue.first.isSynced, false);
     });
 
-    test('Syncing all pending actions flushes queue and marks all as synced', () {
+    test('Syncing all pending actions flushes queue and marks all as synced',
+        () {
       final notifier = OfflineCacheNotifier(
         OfflineStorageCache(
           lastCachedTime: DateTime.now().subtract(const Duration(hours: 1)),

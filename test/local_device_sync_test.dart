@@ -15,15 +15,18 @@ void main() {
       final devices = container.read(nearbyLocalDevicesProvider);
 
       expect(devices.length, equals(3));
-      expect(devices.any((d) => d.connectionType == LocalConnectionType.bluetoothBle),
-          isTrue);
       expect(
           devices
-              .any((d) => d.connectionType == LocalConnectionType.localWifiSoftAp),
+              .any((d) => d.connectionType == LocalConnectionType.bluetoothBle),
+          isTrue);
+      expect(
+          devices.any(
+              (d) => d.connectionType == LocalConnectionType.localWifiSoftAp),
           isTrue);
     });
 
-    test('Syncs sensor telemetry directly over offline protocol into Riverpod state',
+    test(
+        'Syncs sensor telemetry directly over offline protocol into Riverpod state',
         () async {
       final container = ProviderContainer();
       final notifier = container.read(nearbyLocalDevicesProvider.notifier);
@@ -45,7 +48,8 @@ void main() {
           .reading;
 
       expect(updatedReading.isOnline, isTrue);
-      expect(updatedReading.timestamp.isAfter(initialReading.timestamp) ||
+      expect(
+          updatedReading.timestamp.isAfter(initialReading.timestamp) ||
               updatedReading.timestamp == initialReading.timestamp,
           isTrue);
     });

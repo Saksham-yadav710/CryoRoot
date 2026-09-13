@@ -14,10 +14,11 @@ class TransitTrackerScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final manifests = ref.watch(transitManifestsProvider);
-    final TransitManifest? manifest = manifests.cast<TransitManifest?>().firstWhere(
-          (m) => m?.manifestId == manifestId,
-          orElse: () => null,
-        );
+    final TransitManifest? manifest =
+        manifests.cast<TransitManifest?>().firstWhere(
+              (m) => m?.manifestId == manifestId,
+              orElse: () => null,
+            );
 
     if (manifest == null) {
       return Scaffold(
@@ -29,8 +30,7 @@ class TransitTrackerScreen extends ConsumerWidget {
     }
 
     final isDelivered = manifest.status == TransitStatus.delivered;
-    final isWarning =
-        manifest.status == TransitStatus.temperatureWarning;
+    final isWarning = manifest.status == TransitStatus.temperatureWarning;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -437,9 +437,7 @@ class TransitTrackerScreen extends ConsumerWidget {
             // Driver / Voice Advisory Button
             OutlinedButton.icon(
               onPressed: () {
-                ref
-                    .read(enhancedAudioControllerProvider)
-                    .speakTransitAdvisory(
+                ref.read(enhancedAudioControllerProvider).speakTransitAdvisory(
                       cropName: manifest.cropProfile.name,
                       destinationMandi: manifest.destinationMandi,
                       currentTemp: manifest.currentTemp,

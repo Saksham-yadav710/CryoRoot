@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../../core/theme/app_colors.dart';
 import '../../../models/sensor_reading.dart';
+import '../../../models/status_level.dart';
 import 'telemetry_card.dart';
 
 class TelemetryGrid extends StatelessWidget {
@@ -10,22 +11,43 @@ class TelemetryGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isOnline = reading.isOnline;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'KEY STORAGE CONDITIONS',
-            style: TextStyle(
-              fontSize: 11,
-              fontWeight: FontWeight.w800,
-              color: AppColors.textSecondary,
-              letterSpacing: 0.5,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'PRIMARY STORAGE CONDITIONS',
+                style: TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.textSecondary,
+                  letterSpacing: 0.5,
+                ),
+              ),
+              Text(
+                isOnline
+                    ? 'VALUE + STATUS + EXPLANATION'
+                    : 'OFFLINE (LAST KNOWN)',
+                style: TextStyle(
+                  fontSize: 10,
+                  fontWeight: FontWeight.w700,
+                  color: isOnline
+                      ? AppColors.textTertiary
+                      : AppColors.statusOffline,
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: 10),
-          // 2-Column Responsive Grid of Telemetry Cards
+
+          // Primary 5-Card Layout:
+          // Top 2: Temperature & Humidity
           GridView.count(
             crossAxisCount: 2,
             shrinkWrap: true,
@@ -37,9 +59,11 @@ class TelemetryGrid extends StatelessWidget {
               // 1. Temperature Card
               TelemetryCard(
                 title: 'Temperature',
-                value: '${reading.temperature.toStringAsFixed(1)}°C',
+                value: reading.displayTemperature,
                 status: reading.temperatureStatus,
-                statusText: reading.temperatureStatus.label,
+                statusText: !reading.isTemperatureValid
+                    ? 'UNAVAILABLE'
+                    : (!isOnline ? 'OFFLINE' : reading.temperatureStatus.label),
                 explanation: reading.temperatureExplanation,
                 icon: Icons.thermostat_rounded,
                 accentColor: AppColors.secondary,
@@ -48,9 +72,11 @@ class TelemetryGrid extends StatelessWidget {
               // 2. Humidity Card
               TelemetryCard(
                 title: 'Humidity',
-                value: '${reading.humidity.toInt()}%',
+                value: reading.displayHumidity,
                 status: reading.humidityStatus,
-                statusText: reading.humidityStatus.label,
+                statusText: !reading.isHumidityValid
+                    ? 'UNAVAILABLE'
+                    : (!isOnline ? 'OFFLINE' : reading.humidityStatus.label),
                 explanation: reading.humidityExplanation,
                 icon: Icons.water_drop_rounded,
                 accentColor: const Color(0xFF0284C7),
@@ -59,9 +85,11 @@ class TelemetryGrid extends StatelessWidget {
               // 3. Battery Card
               TelemetryCard(
                 title: 'Battery',
-                value: '${reading.battery}%',
+                value: reading.displayBattery,
                 status: reading.batteryStatus,
-                statusText: reading.batteryStatus.label,
+                statusText: !reading.isBatteryValid
+                    ? 'UNAVAILABLE'
+                    : (!isOnline ? 'OFFLINE' : reading.batteryStatus.label),
                 explanation: reading.batteryExplanation,
                 icon: Icons.battery_charging_full_rounded,
                 accentColor: AppColors.statusGood,
@@ -70,154 +98,183 @@ class TelemetryGrid extends StatelessWidget {
               // 4. Solar Power Card
               TelemetryCard(
                 title: 'Solar Power',
-                value: '${reading.solarPower}',
-                unit: 'W',
+                value: reading.displaySolar,
+                unit: reading.isSolarValid ? 'W' : null,
                 status: reading.solarStatus,
-                statusText: reading.solarPower > 0 ? 'ACTIVE' : 'INACTIVE',
+                statusText: !reading.isSolarValid
+                    ? 'UNAVAILABLE'
+                    : (!isOnline
+                        ? 'OFFLINE'
+                        : (reading.solarPower > 0 ? 'ACTIVE' : 'INACTIVE')),
                 explanation: reading.solarExplanation,
                 icon: Icons.solar_power_rounded,
                 accentColor: AppColors.solarGold,
-              ),
-
-              // 5. Grid Power Card (Clear Outage Alert)
-              TelemetryCard(
-                title: 'Grid Power',
-                value: reading.gridPower ? 'ON' : 'OUTAGE',
-                status: reading.gridStatus,
-                statusText: reading.gridPower ? 'CONNECTED' : 'OFFLINE',
-                explanation: reading.gridExplanation,
-                icon: reading.gridPower
-                    ? Icons.power_rounded
-                    : Icons.power_off_rounded,
-                accentColor: reading.gridPower
-                    ? AppColors.primary
-                    : AppColors.statusWarning,
-              ),
-
-              // 6. PCM Backup Card (Cold Reserve)
-              TelemetryCard(
-                title: 'PCM Backup',
-                value: reading.formattedPcmHours,
-                status: reading.pcmStatus,
-                statusText: reading.pcmStatus.systemSafeLabel,
-                explanation: reading.pcmExplanation,
-                icon: Icons.ac_unit_rounded,
-                accentColor: AppColors.pcmCyan,
               ),
             ],
           ),
 
           const SizedBox(height: 12),
 
-          // Secondary Row: Door Status & Water Level (Compact)
+          // 5. PCM Thermal Backup (Hero Card for Cold Storage Reserve)
+          TelemetryCard(
+            title: 'PCM Backup',
+            value: reading.displayPcmHours,
+            status: reading.pcmStatus,
+            statusText: !reading.isPcmValid
+                ? 'UNAVAILABLE'
+                : (!isOnline ? 'OFFLINE' : reading.pcmStatus.systemSafeLabel),
+            explanation: reading.pcmExplanation,
+            icon: Icons.ac_unit_rounded,
+            accentColor: AppColors.pcmCyan,
+          ),
+
+          const SizedBox(height: 16),
+
+          // Secondary Parameters Heading
+          const Text(
+            'SECONDARY PARAMETERS',
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w800,
+              color: AppColors.textSecondary,
+              letterSpacing: 0.5,
+            ),
+          ),
+          const SizedBox(height: 10),
+
+          // Compact 3-Column Row for Grid Power, Door Status, Water Level
           Row(
             children: [
-              // Door Status
+              // Grid Power
               Expanded(
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: reading.doorOpen
-                        ? AppColors.statusWarningBg
-                        : AppColors.surface,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: reading.doorOpen
-                          ? AppColors.statusWarningBorder
-                          : AppColors.border,
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        reading.doorOpen
-                            ? Icons.door_front_door_outlined
-                            : Icons.meeting_room_rounded,
-                        size: 18,
-                        color: reading.doorOpen
-                            ? AppColors.statusWarning
-                            : AppColors.primary,
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'DOOR: ${reading.doorOpen ? 'OPEN' : 'CLOSED'}',
-                              style: TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w800,
-                                color: reading.doorOpen
-                                    ? AppColors.statusWarning
-                                    : AppColors.textPrimary,
-                              ),
-                            ),
-                            Text(
-                              reading.doorExplanation,
-                              style: const TextStyle(
-                                fontSize: 10,
-                                color: AppColors.textSecondary,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                child: _buildCompactCard(
+                  title: 'GRID POWER',
+                  value: reading.displayGridPower,
+                  statusLevel: reading.gridStatus,
+                  statusText: !reading.isGridValid
+                      ? 'UNAVAIL'
+                      : (reading.gridPower ? 'NORMAL' : 'OUTAGE'),
+                  icon: reading.gridPower
+                      ? Icons.power_rounded
+                      : Icons.power_off_rounded,
+                  iconColor: reading.gridPower
+                      ? AppColors.primary
+                      : AppColors.statusWarning,
+                  bgColor: reading.gridPower
+                      ? AppColors.surface
+                      : AppColors.statusWarningBg,
                 ),
               ),
-              const SizedBox(width: 10),
+              const SizedBox(width: 8),
+
+              // Door Status
+              Expanded(
+                child: _buildCompactCard(
+                  title: 'DOOR',
+                  value: reading.displayDoor,
+                  statusLevel: reading.doorStatus,
+                  statusText: !reading.isDoorValid
+                      ? 'UNAVAIL'
+                      : (reading.doorOpen ? 'WARNING' : 'SECURE'),
+                  icon: reading.doorOpen
+                      ? Icons.door_front_door_outlined
+                      : Icons.meeting_room_rounded,
+                  iconColor: reading.doorOpen
+                      ? AppColors.statusCritical
+                      : AppColors.primary,
+                  bgColor: reading.doorOpen
+                      ? AppColors.statusCriticalBg
+                      : AppColors.surface,
+                ),
+              ),
+              const SizedBox(width: 8),
+
               // Water Level
               Expanded(
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                  decoration: BoxDecoration(
-                    color: AppColors.surface,
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: AppColors.border),
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(
-                        Icons.opacity_rounded,
-                        size: 18,
-                        color: AppColors.secondary,
-                      ),
-                      const SizedBox(width: 8),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'WATER: ${reading.waterLevel}%',
-                              style: const TextStyle(
-                                fontSize: 11,
-                                fontWeight: FontWeight.w800,
-                                color: AppColors.textPrimary,
-                              ),
-                            ),
-                            const Text(
-                              'Humidifier tank level',
-                              style: TextStyle(
-                                fontSize: 10,
-                                color: AppColors.textSecondary,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                child: _buildCompactCard(
+                  title: 'WATER TANK',
+                  value: reading.displayWaterLevel,
+                  statusLevel: StatusLevel.good,
+                  statusText: !reading.isWaterValid ? 'UNAVAIL' : 'GOOD',
+                  icon: Icons.opacity_rounded,
+                  iconColor: const Color(0xFF0284C7),
+                  bgColor: AppColors.surface,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCompactCard({
+    required String title,
+    required String value,
+    required StatusLevel statusLevel,
+    required String statusText,
+    required IconData icon,
+    required Color iconColor,
+    required Color bgColor,
+  }) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      decoration: BoxDecoration(
+        color: bgColor,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: statusLevel == StatusLevel.good
+              ? AppColors.border
+              : statusLevel.borderColor,
+          width: 1.0,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Icon(icon, size: 16, color: iconColor),
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                decoration: BoxDecoration(
+                  color: statusLevel.backgroundColor,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: Text(
+                  statusText,
+                  style: TextStyle(
+                    fontSize: 8,
+                    fontWeight: FontWeight.w900,
+                    color: statusLevel.color,
                   ),
                 ),
               ),
             ],
+          ),
+          const SizedBox(height: 6),
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w900,
+              color: AppColors.textPrimary,
+              letterSpacing: -0.2,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 2),
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: 9,
+              fontWeight: FontWeight.w700,
+              color: AppColors.textSecondary,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),

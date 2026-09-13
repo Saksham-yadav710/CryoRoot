@@ -23,7 +23,8 @@ class _DispatchTransitScreenState extends ConsumerState<DispatchTransitScreen> {
   String? _selectedMandi;
   TransitMode _selectedMode = TransitMode.solarReeferVan;
   int _transitHours = 3;
-  final TextEditingController _vehicleCtrl = TextEditingController(text: 'AS-01-GB-3342');
+  final TextEditingController _vehicleCtrl =
+      TextEditingController(text: 'AS-01-GB-3342');
   final TextEditingController _driverNameCtrl =
       TextEditingController(text: 'Manoj Bora');
   final TextEditingController _driverPhoneCtrl =
@@ -208,9 +209,8 @@ class _DispatchTransitScreenState extends ConsumerState<DispatchTransitScreen> {
                             : AppColors.surface,
                         borderRadius: BorderRadius.circular(14),
                         border: Border.all(
-                          color: isSelected
-                              ? AppColors.primary
-                              : AppColors.border,
+                          color:
+                              isSelected ? AppColors.primary : AppColors.border,
                           width: isSelected ? 2 : 1,
                         ),
                       ),
@@ -374,9 +374,8 @@ class _DispatchTransitScreenState extends ConsumerState<DispatchTransitScreen> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      validator: (val) => val == null || val.isEmpty
-                          ? 'Enter vehicle #'
-                          : null,
+                      validator: (val) =>
+                          val == null || val.isEmpty ? 'Enter vehicle #' : null,
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -446,7 +445,8 @@ class _DispatchTransitScreenState extends ConsumerState<DispatchTransitScreen> {
                           .read(transitManifestsProvider.notifier)
                           .dispatchBatchToTransit(
                             batch: batch,
-                            destinationMandi: _selectedMandi ?? _mandiOptions.first,
+                            destinationMandi:
+                                _selectedMandi ?? _mandiOptions.first,
                             transitMode: _selectedMode,
                             vehicleNumber: _vehicleCtrl.text.trim(),
                             driverName: _driverNameCtrl.text.trim(),

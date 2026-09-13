@@ -29,6 +29,10 @@ class HomeScreen extends ConsumerWidget {
     final alerts = ref.watch(activeAlertsProvider);
 
     final unreadAlertsCount = alerts.where((a) => !a.isAcknowledged).length;
+    final connectionState =
+        ref.watch(unitConnectionStateProvider(selectedUnit?.id ?? ''));
+    final freshnessText =
+        ref.watch(unitFreshnessTextProvider(selectedUnit?.id ?? ''));
 
     if (selectedUnit == null) {
       return const Scaffold(
@@ -69,8 +73,15 @@ class HomeScreen extends ConsumerWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // Overall System Health Summary Banner
-                    OverallStatusBanner(summary: summary),
+                    // Overall System Health & Connectivity Summary Banner
+                    OverallStatusBanner(
+                      summary: summary,
+                      units: units,
+                      onUnitTapped: (unitId) {
+                        ref.read(selectedUnitIdProvider.notifier).state =
+                            unitId;
+                      },
+                    ),
 
                     // Multi-Storage Unit Selector
                     UnitSelector(
@@ -87,9 +98,11 @@ class HomeScreen extends ConsumerWidget {
 
                     const SizedBox(height: 6),
 
-                    // Selected Cold Storage Hero Card (Branding, Status, Listen, Details)
+                    // Selected Cold Storage Hero Card (Branding, Status, Connection, Listen, Details)
                     SelectedUnitHeroCard(
                       unit: selectedUnit,
+                      connectionState: connectionState,
+                      freshnessText: freshnessText,
                       isPlayingAudio: isAudioPlaying,
                       onListenPressed: () {
                         if (isAudioPlaying) {
@@ -261,9 +274,11 @@ class HomeScreen extends ConsumerWidget {
                 },
               ),
               ListTile(
-                leading: const Icon(Icons.tune_rounded, color: AppColors.primary),
+                leading:
+                    const Icon(Icons.tune_rounded, color: AppColors.primary),
                 title: const Text('Hardware Sensor Simulator'),
-                subtitle: const Text('Debug telemetry sliders & one-tap presets'),
+                subtitle:
+                    const Text('Debug telemetry sliders & one-tap presets'),
                 trailing: const Icon(Icons.chevron_right),
                 onTap: () {
                   Navigator.pop(context);

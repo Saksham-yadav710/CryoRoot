@@ -581,9 +581,11 @@ class ProduceDetailScreen extends ConsumerWidget {
                 ),
                 subtitle: const Text(
                   'Assign Reefer/Crate, Mandi destination & live thermal tracking',
-                  style: TextStyle(fontSize: 11, color: AppColors.textSecondary),
+                  style:
+                      TextStyle(fontSize: 11, color: AppColors.textSecondary),
                 ),
-                trailing: const Icon(Icons.chevron_right, color: AppColors.primary),
+                trailing:
+                    const Icon(Icons.chevron_right, color: AppColors.primary),
                 onTap: () {
                   Navigator.pop(context);
                   context.push('/produce/dispatch/${batch.batchId}');
@@ -608,7 +610,8 @@ class ProduceDetailScreen extends ConsumerWidget {
                 ),
                 subtitle: const Text(
                   'Immediate checkout without transport telemetry',
-                  style: TextStyle(fontSize: 11, color: AppColors.textSecondary),
+                  style:
+                      TextStyle(fontSize: 11, color: AppColors.textSecondary),
                 ),
                 onTap: () {
                   ref

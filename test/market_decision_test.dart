@@ -16,7 +16,9 @@ void main() {
       expect(quotes.first.currentPricePerKg, greaterThan(50.0));
     });
 
-    test('Recommends HOLD & STORE for Khasi Mandarin with rising projected prices', () {
+    test(
+        'Recommends HOLD & STORE for Khasi Mandarin with rising projected prices',
+        () {
       final batch = ProduceBatch(
         batchId: 'AC-2026-00125',
         cropProfile: CropProfilesData.khasiMandarin,
@@ -37,7 +39,9 @@ void main() {
       expect(decision.rationale, contains('projected to rise'));
     });
 
-    test('Recommends DISPATCH IMMEDIATELY (Distress Sale) when chamber warms up', () {
+    test(
+        'Recommends DISPATCH IMMEDIATELY (Distress Sale) when chamber warms up',
+        () {
       final batch = ProduceBatch(
         batchId: 'AC-2026-00125',
         cropProfile: CropProfilesData.khasiMandarin,

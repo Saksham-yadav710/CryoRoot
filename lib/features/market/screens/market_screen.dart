@@ -86,7 +86,8 @@ class MarketScreen extends ConsumerWidget {
                         onPressed: () {
                           if (batches.isNotEmpty) {
                             final b = batches.first;
-                            final u = units.firstWhere((un) => un.id == b.unitId,
+                            final u = units.firstWhere(
+                                (un) => un.id == b.unitId,
                                 orElse: () => units.first);
                             final d = MarketDecisionEngine.evaluateBatch(
                               batch: b,
@@ -97,7 +98,8 @@ class MarketScreen extends ConsumerWidget {
                               decisionLabel: d.decision.label,
                               mandiName: d.bestMandi.marketName,
                               currentPrice: d.bestMandi.currentPricePerKg,
-                              projectedPrice: d.bestMandi.projectedPrice7DaysPerKg,
+                              projectedPrice:
+                                  d.bestMandi.projectedPrice7DaysPerKg,
                               expectedGain: d.expectedNetGainTotal,
                             );
                           }
@@ -118,7 +120,8 @@ class MarketScreen extends ConsumerWidget {
                   const SizedBox(height: 6),
                   const Text(
                     'Real-time economic advisory balancing storage power costs against 7-day APMC mandi price forecasts.',
-                    style: TextStyle(fontSize: 12, color: Colors.white70, height: 1.3),
+                    style: TextStyle(
+                        fontSize: 12, color: Colors.white70, height: 1.3),
                   ),
                 ],
               ),
@@ -161,7 +164,8 @@ class MarketScreen extends ConsumerWidget {
                   currentChamberTemp: unit.reading.temperature,
                 );
 
-                return _buildBatchDecisionCard(context, ref, batch, decision, unit);
+                return _buildBatchDecisionCard(
+                    context, ref, batch, decision, unit);
               }),
 
             const SizedBox(height: 20),
@@ -569,8 +573,8 @@ class MarketScreen extends ConsumerWidget {
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 6),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                     decoration: BoxDecoration(
                       color: status.color,
                       borderRadius: BorderRadius.circular(8),
@@ -651,12 +655,14 @@ class MarketScreen extends ConsumerWidget {
                     const Divider(height: 16, color: AppColors.border),
                     _buildDetailModalRow(
                       label: 'Current Mandi Price',
-                      value: '₹${decision.bestMandi.currentPricePerKg.toStringAsFixed(0)} / kg',
+                      value:
+                          '₹${decision.bestMandi.currentPricePerKg.toStringAsFixed(0)} / kg',
                     ),
                     const Divider(height: 16, color: AppColors.border),
                     _buildDetailModalRow(
                       label: 'Projected 7-Day Price',
-                      value: '₹${decision.bestMandi.projectedPrice7DaysPerKg.toStringAsFixed(0)} / kg',
+                      value:
+                          '₹${decision.bestMandi.projectedPrice7DaysPerKg.toStringAsFixed(0)} / kg',
                     ),
                     const Divider(height: 16, color: AppColors.border),
                     _buildDetailModalRow(

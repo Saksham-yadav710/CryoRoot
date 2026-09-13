@@ -35,7 +35,7 @@ class UnitSelector extends StatelessWidget {
                 ),
               ),
               Text(
-                '${units.length} connected',
+                '${units.length} Chambers',
                 style: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
@@ -47,7 +47,7 @@ class UnitSelector extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         SizedBox(
-          height: 64,
+          height: 66,
           child: ListView.separated(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             scrollDirection: Axis.horizontal,
@@ -57,6 +57,7 @@ class UnitSelector extends StatelessWidget {
               final unit = units[index];
               final bool isSelected = unit.id == selectedUnitId;
               final StatusLevel status = unit.status;
+              final bool isOnline = unit.reading.isOnline;
 
               return InkWell(
                 onTap: () => onUnitSelected(unit.id),
@@ -67,21 +68,21 @@ class UnitSelector extends StatelessWidget {
                       const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                   decoration: BoxDecoration(
                     color: isSelected
-                        ? AppColors.primaryContainer.withValues(alpha: 0.4)
+                        ? AppColors.primaryContainer.withValues(alpha: 0.45)
                         : AppColors.surface,
                     borderRadius: BorderRadius.circular(14),
                     border: Border.all(
                       color: isSelected
                           ? AppColors.primary
-                          : unit.status == StatusLevel.good
+                          : (status == StatusLevel.good && isOnline
                               ? AppColors.border
-                              : unit.status.borderColor,
+                              : status.borderColor),
                       width: isSelected ? 2.0 : 1.2,
                     ),
                     boxShadow: isSelected
                         ? [
                             BoxShadow(
-                              color: AppColors.primary.withValues(alpha: 0.12),
+                              color: AppColors.primary.withValues(alpha: 0.15),
                               blurRadius: 8,
                               offset: const Offset(0, 2),
                             ),
@@ -96,11 +97,15 @@ class UnitSelector extends StatelessWidget {
                         width: 10,
                         height: 10,
                         decoration: BoxDecoration(
-                          color: status.color,
+                          color:
+                              isOnline ? status.color : AppColors.statusOffline,
                           shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
-                              color: status.color.withValues(alpha: 0.4),
+                              color: (isOnline
+                                      ? status.color
+                                      : AppColors.statusOffline)
+                                  .withValues(alpha: 0.4),
                               blurRadius: 4,
                               spreadRadius: 1,
                             ),
@@ -136,23 +141,31 @@ class UnitSelector extends StatelessWidget {
                           ),
                         ],
                       ),
-                      const SizedBox(width: 6),
+                      const SizedBox(width: 8),
                       // Status Label Tag
                       Container(
                         padding: const EdgeInsets.symmetric(
                             horizontal: 6, vertical: 2),
                         decoration: BoxDecoration(
-                          color: status.backgroundColor,
+                          color: isOnline
+                              ? status.backgroundColor
+                              : AppColors.statusOfflineBg,
                           borderRadius: BorderRadius.circular(6),
-                          border:
-                              Border.all(color: status.borderColor, width: 0.8),
+                          border: Border.all(
+                            color: isOnline
+                                ? status.borderColor
+                                : AppColors.statusOfflineBorder,
+                            width: 0.8,
+                          ),
                         ),
                         child: Text(
-                          status.systemSafeLabel,
+                          isOnline ? status.systemSafeLabel : 'OFFLINE',
                           style: TextStyle(
                             fontSize: 9,
                             fontWeight: FontWeight.w900,
-                            color: status.color,
+                            color: isOnline
+                                ? status.color
+                                : AppColors.statusOffline,
                           ),
                         ),
                       ),

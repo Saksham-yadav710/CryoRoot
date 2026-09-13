@@ -29,7 +29,8 @@ final offlineCacheProvider =
       ),
       ProduceBatch(
         batchId: 'AC-2026-00126',
-        cropProfile: CropProfilesData.getProfiles().firstWhere((p) => p.id == 'CROP-TOMATO'),
+        cropProfile: CropProfilesData.getProfiles()
+            .firstWhere((p) => p.id == 'CROP-TOMATO'),
         quantityKg: 2000,
         unitId: 'AC-NER-001',
         unitName: 'Cold Storage 1',

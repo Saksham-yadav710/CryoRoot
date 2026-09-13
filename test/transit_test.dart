@@ -65,7 +65,9 @@ void main() {
       expect(delivered.status, equals(TransitStatus.delivered));
     });
 
-    test('Triggers thermal warning when transit temperature exceeds safe limits', () {
+    test(
+        'Triggers thermal warning when transit temperature exceeds safe limits',
+        () {
       final container = ProviderContainer();
       final manifest = container.read(transitManifestsProvider).first;
 

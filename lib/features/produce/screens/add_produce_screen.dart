@@ -37,7 +37,8 @@ class _AddProduceScreenState extends ConsumerState<AddProduceScreen> {
     if (units.isNotEmpty) {
       _selectedUnitId = units.first.id;
     }
-    _nextBatchId = ref.read(produceBatchesProvider.notifier).generateNextBatchId();
+    _nextBatchId =
+        ref.read(produceBatchesProvider.notifier).generateNextBatchId();
   }
 
   @override
@@ -537,4 +538,3 @@ class _AddProduceScreenState extends ConsumerState<AddProduceScreen> {
     );
   }
 }
-
